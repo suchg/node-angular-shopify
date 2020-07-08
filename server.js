@@ -3,10 +3,14 @@
 require('isomorphic-fetch');
 const dotenv = require('dotenv');
 var serve = require('koa-static');
+// router = require('koa-router')();
 const Koa = require('koa');
 const { default: createShopifyAuth } = require('@shopify/koa-shopify-auth');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');
 const session = require('koa-session');
+const request = require('request');
+const rp = require('request-promise');
+
 
 dotenv.config();
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
@@ -17,7 +21,6 @@ const { createServer } = require('https');
 const { parse } = require('url')
 const next = require('next')
 const fs = require('fs');
-
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
@@ -30,9 +33,27 @@ const httpsOptions = {
 
 app.prepare().then(() => {
   const server = new Koa();
+  let shopifyAccessToken = '';
+  let shopifyShop = 'unlikelyflorist.myshopify.com';
+  // const router = new Router();
   server.use(session({ secure: true, sameSite: 'none' }, server));
   server.keys = [SHOPIFY_API_SECRET_KEY];
 
+  // router.get('/subscriptions', async (ctx, next) => {
+  //   const shopRequestUrl = 'https://' + shopifyShop + '/admin/api/2020-04/products.json?type=subscription';
+  //   const shopRequestHeaders = {
+  //     'X-Shopify-Access-Token': shopifyAccessToken,
+  //   };
+  //   await rp.get(shopRequestUrl, { headers: shopRequestHeaders })
+  //     .then((shopResponse) => {
+  //       ctx.body = shopResponse;
+  //     })
+  //     .catch((error) => {
+  //       ctx.body = error;
+  //     });
+  // });
+
+  // server.use(router.routes()).use(router.allowedMethods());
   server.use(
     createShopifyAuth({
       apiKey: SHOPIFY_API_KEY,
@@ -40,8 +61,10 @@ app.prepare().then(() => {
       scopes: ['read_products'],
       afterAuth(ctx) {
         const { shop, accessToken } = ctx.session;
-
-        ctx.redirect('/');
+        // shopifyAccessToken = accessToken;
+        // shopifyShop = shop;
+        ctx.cookies.set("shopOrigin", shopifyShop, { httpOnly: false });
+        ctx.redirect('/angular/index.html');
       },
     }),
   );
@@ -54,9 +77,10 @@ app.prepare().then(() => {
     return
   });
 
-  app.use(serve('./public'));
-  
-  const httpsServer = createServer(httpsOptions, server.callback()  )
+  server.use(serve('./public'));
+
+  const httpsServer = createServer(httpsOptions, server.callback())
+
   httpsServer.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });
