@@ -90,6 +90,22 @@ const discountApp = {
         resolve(data);
       });
     });
+  },
+  fetchFrequencyMaster: (res, req) => {
+    return new Promise((resolve, reject) => {
+      const query = 'select * from frequencyMaster';
+      dbcon.select({query}, (data)=>{
+        resolve(data);
+      });
+    });
+  },
+  fetchDurationMaster: (res, req) => {
+    return new Promise((resolve, reject) => {
+      const query = 'select * from durationMaster';
+      dbcon.select({query}, (data)=>{
+        resolve(data);
+      });
+    });
   }
 }
 

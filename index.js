@@ -5,7 +5,7 @@ var cors = require('cors')
 const app = express();
 const crypto = require('crypto');
 const cookie = require('cookie');
-const nonce = require('nonce')();
+
 const querystring = require('querystring');
 const request = require('request-promise');
 const fs = require('fs');
@@ -18,6 +18,21 @@ var productsService = require('./services/product');
 var discountService = require('./services/discount');
 var prerequisiteDao = require('./dao/prerequisite');
 var variantMasterService = require('./services/variantMaster');
+var prerequisiteService = require('./services/prerequisite');
+var subscriptionManupulate = require('./services/subscriptionManupulate');
+var authService = require('./services/auth');
+var cron = require('node-cron');
+var moment = require('moment');
+
+cron.schedule('*/5 * * * * *', () => {
+  console.log('running a task every two minutes');
+  subscriptionManupulate.operations.startSubscriptionPolling();
+});
+
+cron.schedule('*/3 * * * * *', () => {
+  subscriptionManupulate.operations.raiseOrdersPolling();
+});
+
 
 const httpsOptions = {
   key: fs.readFileSync('./httpscertificate/103.102.234.108.key'),
@@ -31,109 +46,29 @@ const scopes = 'read_products,write_products,read_orders,write_orders,read_custo
 const forwardingAddress = "https://103.102.234.108/"; // Replace this with your HTTPS Forwarding address
 var httpsServer = createServer(httpsOptions, app);
 
+// // cron job to extend session
+// cron.schedule('*/10 * * * * *', () => {
+//   request.get( `${forwardingAddress}shopify?shop=unlikelyflorist-com.myshopify.com` )
+//   .then((data) => {
+//     console.log('session extended');
+//   })
+//   .catch( (error) => {
+//     console.log('error in session extension');
+//   } )
+// });
+
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api', [ordersService, productsService, discountService, variantMasterService]);
+app.use('/api', [ordersService.router, productsService, discountService, variantMasterService]);
 app.use(express.static('./public'));
 
 httpsServer.listen(port, () => {
-  console.log('Example app listening on port' + port);
+  console.log('Subscription app is listening on port' + port);
   prerequisiteDao.init();
 });
 
-app.get('/shopify', (req, res) => {
-  const shop = req.query.shop;
-  if (shop) {
-    const state = nonce();
-    const redirectUri = forwardingAddress + 'shopify/callback';
-    const installUrl = 'https://' + shop +
-      '/admin/oauth/authorize?client_id=' + apiKey +
-      '&scope=' + scopes +
-      '&state=' + state +
-      '&redirect_uri=' + redirectUri;
-      console.log('>>'+shop);
-      res.cookie("shopOrigin", shop, { httpOnly: false });
-    res.cookie('state', state);
-    res.redirect(installUrl);
-  } else {
-    return res.status(400).send('Missing shop parameter. Please add ?shop=your-development-shop.myshopify.com to your request');
-  }
-});
-
-app.get('/shopify/callback', (req, res) => {
-  const { shop, hmac, code, state } = req.query;
-  const stateCookie = cookie.parse(req.headers.cookie).state;
-  global.shop = shop;
-  console.log('>>'+shop);
-  res.cookie("shopOrigin", shop, { httpOnly: false });
-  if (state !== stateCookie) {
-    return res.status(403).send('Request origin cannot be verified');
-  }
-
-  if (shop && hmac && code) {
-    // DONE: Validate request is from Shopify
-    const map = Object.assign({}, req.query);
-    delete map['signature'];
-    delete map['hmac'];
-    const message = querystring.stringify(map);
-    const providedHmac = Buffer.from(hmac, 'utf-8');
-    const generatedHash = Buffer.from(
-      crypto
-        .createHmac('sha256', apiSecret)
-        .update(message)
-        .digest('hex'),
-        'utf-8'
-      );
-    let hashEquals = false;
-
-    try {
-      hashEquals = crypto.timingSafeEqual(generatedHash, providedHmac)
-    } catch (e) {
-      hashEquals = false;
-    };
-
-    if (!hashEquals) {
-      return res.status(400).send('HMAC validation failed');
-    }
-
-    // DONE: Exchange temporary code for a permanent access token
-    const accessTokenRequestUrl = 'https://' + shop + '/admin/oauth/access_token';
-    const accessTokenPayload = {
-      client_id: apiKey,
-      client_secret: apiSecret,
-      code,
-    };
-
-    // res.redirect('/angular/index.html');
-
-    request.post(accessTokenRequestUrl, { json: accessTokenPayload })
-    .then((accessTokenResponse) => {
-      global.accessToken = accessTokenResponse.access_token;
-      res.redirect('/angular/index.html');
-      // const accessToken = accessTokenResponse.access_token;
-      // DONE: Use access token to make API call to 'shop' endpoint
-      // const shopRequestUrl = 'https://' + shop + '/admin/api/2020-04/shop.json';
-      // const shopRequestHeaders = {
-      //   'X-Shopify-Access-Token': accessToken,
-      // };
-
-      // request.get(shopRequestUrl, { headers: shopRequestHeaders })
-      // .then((shopResponse) => {
-      //   res.status(200).end(shopResponse);
-      // })
-      // .catch((error) => {
-      //   res.status(error.statusCode).send(error.error.error_description);
-      // });
-    })
-    .catch((error) => {
-      res.status(error.statusCode).send(error.error.error_description);
-    });
-
-  } else {
-    res.status(400).send('Required parameters missing');
-  }
-});
+app.use(authService);
 
 app.post('/webhooks/orders/create', async (req, res) => {
   console.log('🎉 We got an order!')

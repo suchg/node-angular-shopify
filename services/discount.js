@@ -123,5 +123,25 @@ router.delete('/priceRule', (req, res) => {
     });
 });
 
+router.get('/frequencyMaster', (req, res) => {
+  discountController.discountApp.fetchFrequencyMaster(req, res)
+    .then((response) => {
+      res.status(200).end(JSON.stringify(response));
+    })
+    .catch((error) => {
+      res.status(error.statusCode).send(JSON.stringify(error));
+    });
+});
+
+router.get('/durationMaster', (req, res) => {
+  discountController.discountApp.fetchDurationMaster(req, res)
+    .then((response) => {
+      res.status(200).end(JSON.stringify(response));
+    })
+    .catch((error) => {
+      res.status(error.statusCode).send(JSON.stringify(error));
+    });
+});
+
 
 module.exports = router;

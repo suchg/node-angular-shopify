@@ -40,30 +40,30 @@ var discountDao = {
       } );
   },
   delete : function ( data, onCallBack ){
-    var strInsert = `DELETE FROM employee WHERE id=?`;
+    var strInsert = `DELETE FROM discounut WHERE id=?`;
 
     dbcon.delete( { query: strInsert, data: data.id }, function(result) {
       onCallBack(result);
     } );
   },
-  select : function ( data, onCallBack ){
+  select: function (data, onCallBack) {
     var strSelect = `SELECT * FROM discounut`;
-    if( data.id ) {
+    if (data.id) {
       strSelect += ` WHERE id = ${data.id}`;
     }
 
-    if( data.discountId ) {
+    if (data.discountId) {
       strSelect += ` WHERE discountId = ${data.discountId}`;
     }
 
-    if( data.priceRuleId ) {
+    if (data.priceRuleId) {
       strSelect += ` WHERE discountId = ${data.priceRuleId}`;
     }
 
-    dbcon.select( { query: strInsert }, function(result) {
+    dbcon.select({ query: strSelect }, function (result) {
       onCallBack(result);
-    } );
-}
+    });
+  }
 }
 
 module.exports = discountDao;

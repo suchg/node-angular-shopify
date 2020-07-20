@@ -15,7 +15,9 @@ const methods = {
       },
       body: data
     };
-    res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    if(res) {
+      res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    }
     return request.post(options);
   },
   put: (req, res, url, data) => {
@@ -30,7 +32,9 @@ const methods = {
       },
       body: data
     };
-    res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    if( res ) {
+      res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    }
     return request.put(options);
   },
   get: (req, res, url) => {
@@ -38,8 +42,20 @@ const methods = {
     const shopRequestHeaders = {
       'X-Shopify-Access-Token': global.accessToken,
     };
-    res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    if( res ) {
+      res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    }
     return request.get(finalUrl, { headers: shopRequestHeaders });
+  },
+  getFull: (req, res, url) => {
+    const finalUrl = 'https://' + global.shop + url;
+    const shopRequestHeaders = {
+      'X-Shopify-Access-Token': global.accessToken,
+    };
+    if( res ) {
+      res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    }
+    return request.get(finalUrl, { headers: shopRequestHeaders, resolveWithFullResponse: true });
   },
   delete: ( req, res, url ) => {
     const finalUrl = 'https://' + global.shop + url;
@@ -51,7 +67,9 @@ const methods = {
         'X-Shopify-Access-Token': global.accessToken
       }
     };
-    res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    if(res) {
+      res.cookie("shopOrigin", global.shop, { httpOnly: false });
+    }
     return request.delete(options);
   }
 }
