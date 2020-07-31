@@ -24,14 +24,13 @@ var authService = require('./services/auth');
 var cron = require('node-cron');
 var moment = require('moment');
 
-// cron.schedule('*/5 * * * * *', () => {
-//   console.log('running a task every two minutes');
-//   subscriptionManupulate.operations.startSubscriptionPolling();
-// });
+cron.schedule('*/5 * * * * *', () => {
+  subscriptionManupulate.operations.startSubscriptionPolling();
+});
 
-// cron.schedule('*/3 * * * * *', () => {
-//   subscriptionManupulate.operations.raiseOrdersPolling();
-// });
+cron.schedule('*/3 * * * * *', () => {
+  subscriptionManupulate.operations.raiseOrdersPolling();
+});
 
 
 const httpsOptions = {

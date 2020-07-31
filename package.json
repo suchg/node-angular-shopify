@@ -1,14 +1,14 @@
 {
   "name": "node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Shopify Subscription App",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server.js",
+    "dev": "node index.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node index.js"
   },
-  "main": "app.js",
+  "main": "index.js",
   "dependencies": {
     "@shopify/koa-shopify-auth": "^3.1.63",
     "body-parser": "^1.19.0",
@@ -33,6 +33,9 @@
   },
   "devDependencies": {},
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "author": "sachin-gavas",
+  "engines": {
+    "node": "12.14.0"
+  }
 }
