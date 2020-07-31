@@ -16,7 +16,8 @@ router.get('/orders', (req, res) => {
 router.get('/upcomingOrders', (req, res) => {
   const from = req.query.from || 0;
   const limit = req.query.limit || 5;
-  productController.productApp.getUpcomingOrders(from, limit)
+  const user = decodeURIComponent(req.query.user) || '';
+  productController.productApp.getUpcomingOrders(from, limit, user)
     .then((upcomingOrderResponse) => {
       productController.productApp.getUpcomingOrdersCount()
         .then((countResponse) => {
@@ -42,6 +43,7 @@ router.get('/shopifyget', (req, res) => {
       res.status(200).end(JSON.stringify(shopResponse));
     })
     .catch((error) => {
+      console.error(error);
       res.status(error.statusCode).send(error.error.error_description);
     });
 });
@@ -51,9 +53,10 @@ router.post('/shopifypost', (req, res) => {
   const data = req.body.data;
   productController.productShopify.shopifypost(req, res, url, data)
     .then((shopResponse) => {
-      res.status(200).end(shopResponse);
+      res.status(200).end(JSON.stringify(shopResponse));
     })
     .catch((error) => {
+      console.error(error);
       res.status(error.statusCode).send(error.error.error_description);
     });
 });

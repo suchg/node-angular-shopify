@@ -25,6 +25,18 @@ router.get('/product', (req, res) => {
     });
 });
 
+router.get('/getUserSubscriptions', (req, res) => {
+  const userId = req.query.userId;
+  productController.productApp.getUserSubscriptions(userId)
+    .then((shopResponse) => {
+      console.log('>>');
+      res.status(200).end( JSON.stringify(shopResponse));
+    })
+    .catch((error) => {
+      res.status(500).send(JSON.stringify(error));
+    });
+});
+
 router.post('/products-variants', (req, res) => {
   const productId = req.body.productId;
   const product = req.body.product;

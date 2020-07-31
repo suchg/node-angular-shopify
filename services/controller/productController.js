@@ -113,19 +113,39 @@ const productApp = {
       onCallBack(result);
     });
   },
+  getUserSubscriptions: (userId) => {
+    const promise = new Promise((resolve, reject) => {
+      const strSelect = `select * from subscription where userEmail = ${dbcon.connection.escape(userId)}`;
+      console.log(strSelect);
+      dbcon.select({ query: strSelect }, function (result) {
+        resolve(result);
+      });
+    });
+    return promise;
+  },
   updateOrderPlaced: ( orderToPlaceId ) => {
     const strUpdate = `update ordersToPlace set orderPlaced = 1 where id = ${orderToPlaceId}`;
     dbcon.select({ query: strUpdate }, (result) => {
       console.log(`Updated orders to place ${orderToPlaceId}`);
     });
   },
-  getUpcomingOrders: ( from, limit ) => {
+  getUpcomingOrders: ( from, limit, user ) => {
     const promise = new Promise((resolve, reject) => {
-      const strSelect = `select t1.id, t1.orderId, t1.productId, t1.orderToPlaceDate, t2.orderData from ordersToPlace as t1
+    let strSelect = '';
+      if (user) {
+        strSelect = `select t1.id, t1.orderId, t1.productId, t1.orderToPlaceDate, t2.orderData from ordersToPlace as t1
+        left join subscription as t2 on t1.orderId = t2.orderId where
+        t1.orderPlaced = 0 and
+        t2.userEmail = ${ dbcon.connection.escape(user) }
+        ORDER BY id DESC
+        LIMIT ${from}, ${limit} `;
+      } else {
+        strSelect = `select t1.id, t1.orderId, t1.productId, t1.orderToPlaceDate, t2.orderData from ordersToPlace as t1
                       left join subscription as t2 on t1.orderId = t2.orderId where
                       t1.orderPlaced = 0
                       ORDER BY id DESC
                       LIMIT ${from}, ${limit} `;
+      }
       console.log(strSelect);
       dbcon.select({ query: strSelect }, function (result) {
         resolve(result);

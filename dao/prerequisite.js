@@ -20,6 +20,7 @@ var prerequisiteDao = {
       id int primary key auto_increment,
       orderId BIGINT not null,
       orderData varchar(15000),
+      userEmail varchar(100),
       udpateDate DATETIME,
       createdDate DATETIME
     )`;
@@ -38,6 +39,8 @@ var prerequisiteDao = {
     const createVariantMaster = `create table if not exists variantMaster(
       id int primary key auto_increment,
       variantTitle varchar(9000) not null,
+      variantKey  varchar(9000) not null,
+      note varchar(9000) not null,
       optionId int,
       udpateDate DATETIME,
       createdDate DATETIME
@@ -46,6 +49,7 @@ var prerequisiteDao = {
     const createOptionMaster = `create table if not exists optionMaster(
       id int primary key,
       optionTitle varchar(9000) not null,
+      optionDescription varchar(9000) not null,
       udpateDate DATETIME,
       createdDate DATETIME
     )`;
@@ -84,10 +88,10 @@ var prerequisiteDao = {
     )`;
 
     const currentDateTime = dbcon.connection.escape( new Date() );
-    const insertDefaultOptions = ` insert IGNORE into optionMaster ( id, optionTitle, udpateDate, createdDate ) 
-    values(1, 'option1', ${ currentDateTime }, ${ currentDateTime }),
-          (2, 'option2', ${ currentDateTime }, ${ currentDateTime }),
-          (3, 'option3', ${ currentDateTime }, ${ currentDateTime });`
+    const insertDefaultOptions = ` insert IGNORE into optionMaster ( id, optionTitle, optionDescription, udpateDate, createdDate ) 
+    values(1, 'option1', '', ${ currentDateTime }, ${ currentDateTime }),
+          (2, 'option2', '', ${ currentDateTime }, ${ currentDateTime }),
+          (3, 'option3', '', ${ currentDateTime }, ${ currentDateTime });`
 
     const insertDefaultFrequency = ` insert IGNORE into frequencyMaster ( id, title, frequency, udpateDate, createdDate ) 
     values(1, 'weekly', 5, ${ currentDateTime }, ${ currentDateTime }),
