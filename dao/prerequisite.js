@@ -29,8 +29,8 @@ var prerequisiteDao = {
       id int primary key auto_increment,
       variantId int,
       productId int,
-      variants varchar(9000),
-      options varchar(9000),
+      variants varchar(1000),
+      options varchar(1000),
       enable TINYINT,
       udpateDate DATETIME,
       createdDate DATETIME
@@ -38,9 +38,9 @@ var prerequisiteDao = {
 
     const createVariantMaster = `create table if not exists variantMaster(
       id int primary key auto_increment,
-      variantTitle varchar(9000) not null,
-      variantKey  varchar(9000) not null,
-      note varchar(9000) not null,
+      variantTitle varchar(1000) not null,
+      variantKey  varchar(1000) not null,
+      note varchar(1000) not null,
       optionId int,
       udpateDate DATETIME,
       createdDate DATETIME
@@ -48,22 +48,22 @@ var prerequisiteDao = {
 
     const createOptionMaster = `create table if not exists optionMaster(
       id int primary key,
-      optionTitle varchar(9000) not null,
-      optionDescription varchar(9000) not null,
+      optionTitle varchar(1000) not null,
+      optionDescription varchar(1000) not null,
       udpateDate DATETIME,
       createdDate DATETIME
     )`;
 
     const createCollectionMaster = `create table if not exists collectionMaster(
       id int primary key auto_increment,
-      title varchar(9000) not null,
+      title varchar(1000) not null,
       udpateDate DATETIME,
       createdDate DATETIME
     )`;
 
     const createFrequencyMaster = `create table if not exists frequencyMaster(
       id int primary key,
-      title varchar(9000) not null,
+      title varchar(1000) not null,
       frequency int not null,
       udpateDate DATETIME,
       createdDate DATETIME
@@ -71,7 +71,7 @@ var prerequisiteDao = {
 
     const createDurationMaster = `create table if not exists durationMaster(
       id int primary key,
-      title varchar(9000) not null,
+      title varchar(1000) not null,
       duration BIGINT not null,
       udpateDate DATETIME,
       createdDate DATETIME
