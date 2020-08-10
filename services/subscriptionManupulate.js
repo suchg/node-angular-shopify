@@ -91,7 +91,7 @@ const operations = {
           // console.log('step 1');
           // console.log( Array.isArray( prodIds) );
           // console.log( prodIds.join() );
-          console.log(prodIds);
+          console.log(productIds);
           productController.productShopify.getSubscriptionOrders()
             .then((ordersResponse) => {
               const objOrdersResponse = JSON.parse(ordersResponse);

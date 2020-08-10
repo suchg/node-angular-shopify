@@ -74,7 +74,7 @@ app.use(express.static('./public'));
 httpsServer.listen(port, () => {
   console.log('Subscription app is listening on port' + port);
   prerequisiteDao.init();
-  utility.callShopifyCallBack();
+  // utility.callShopifyCallBack();
   subscriptionManupulate.operations.startCron();
 });
 
