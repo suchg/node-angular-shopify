@@ -87,7 +87,7 @@ var prerequisiteDao = {
       createdDate DATETIME
     )`;
 
-    const currentDateTime = dbcon.escape( new Date() );
+    const currentDateTime = dbcon.connection.escape( new Date() );
     const insertDefaultOptions = ` insert IGNORE into optionMaster ( id, optionTitle, optionDescription, udpateDate, createdDate ) 
     values(1, 'option1', '', ${ currentDateTime }, ${ currentDateTime }),
           (2, 'option2', '', ${ currentDateTime }, ${ currentDateTime }),

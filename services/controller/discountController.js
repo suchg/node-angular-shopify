@@ -42,10 +42,10 @@ const discountApp = {
       const option1 = [];
       const option2 = [];
       const option3 = [];
-      const currentDateTime = dbcon.escape(new Date());
-      const option1Title = dbcon.escape(options.option1Title);
-      const option2Title = dbcon.escape(options.option2Title);
-      const option3Title = dbcon.escape(options.option3Title);
+      const currentDateTime = dbcon.connection.escape(new Date());
+      const option1Title = dbcon.connection.escape(options.option1Title);
+      const option2Title = dbcon.connection.escape(options.option2Title);
+      const option3Title = dbcon.connection.escape(options.option3Title);
 
       console.log('update option master');
       // update option titles
@@ -70,9 +70,9 @@ const discountApp = {
       // update variants
       options.option1.forEach((item) => {
         option1.push([
-          dbcon.escape(item.name),
-          dbcon.escape(item.variantKey),
-          dbcon.escape(item.note),
+          dbcon.connection.escape(item.name),
+          dbcon.connection.escape(item.variantKey),
+          dbcon.connection.escape(item.note),
           1,
           currentDateTime, currentDateTime
         ]);
@@ -80,9 +80,9 @@ const discountApp = {
 
       options.option2.forEach((item) => {
         option2.push([
-          dbcon.escape(item.name),
-          dbcon.escape(item.variantKey),
-          dbcon.escape(item.note),
+          dbcon.connection.escape(item.name),
+          dbcon.connection.escape(item.variantKey),
+          dbcon.connection.escape(item.note),
           2,
           currentDateTime,
           currentDateTime
@@ -91,9 +91,9 @@ const discountApp = {
 
       options.option3.forEach((item) => {
         option3.push([
-          dbcon.escape(item.name),
-          dbcon.escape(item.variantKey),
-          dbcon.escape(item.note),
+          dbcon.connection.escape(item.name),
+          dbcon.connection.escape(item.variantKey),
+          dbcon.connection.escape(item.note),
           3,
           currentDateTime,
           currentDateTime
