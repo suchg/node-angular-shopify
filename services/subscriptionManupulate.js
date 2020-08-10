@@ -139,7 +139,7 @@ const operations = {
           let orderIds = orders.map((order) => order.id);
           let newOrderIds = [];
 
-          if (!newOrderIds.length) {
+          if (!orderIds.length) {
             resolve([]);
             return;
           }
@@ -150,7 +150,7 @@ const operations = {
           dbcon.select({ query: strSelect }, function (data) {
             // console.log(data);
             const resultOrderids = data.result.map((order) => order.orderId);
-            console.log(resultOrderids);
+            // console.log(resultOrderids);
             if (resultOrderids.length > 0) {
               orderIds.forEach((orderId) => {
                 if (resultOrderids.indexOf(orderId) == -1) {
@@ -161,13 +161,15 @@ const operations = {
               newOrderIds = orderIds;
             }
 
-            const newOrders = orders.filter((order) => {
-              if (newOrderIds.indexOf(order.id) !== -1) {
-                return order;
-              }
-            });
+            // const newOrders = orders.filter((order) => {
+            //   if (newOrderIds.indexOf(order.id) !== -1) {
+            //     return order;
+            //   }
+            // });
             // console.log(newOrders);
-            resolve(newOrders);
+
+
+            resolve(newOrderIds);
           });
         })
         .catch((error) => {
