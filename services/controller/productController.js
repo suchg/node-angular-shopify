@@ -43,6 +43,10 @@ const productShopify = {
     const url = `/admin/api/2020-07/metafields/${metafieldId}.json`;
     return service.get(req, res, url);
   },
+  getSubscriptionMainOrders: ( req, res, metafieldId ) => {
+    const url = `/admin/api/2020-04/orders.json?financial_status=paid&source_name=web`;
+    return service.get(req, res, url);
+  },
   getSubscriptionOrders: ( req, res, metafieldId ) => {
     const url = `/admin/api/2020-04/orders.json?financial_status=paid&source_name=subscription-app`;
     return service.get(req, res, url);

@@ -92,7 +92,7 @@ const operations = {
           // console.log( Array.isArray( prodIds) );
           // console.log( prodIds.join() );
           console.log(productIds);
-          productController.productShopify.getSubscriptionOrders()
+          productController.productShopify.getSubscriptionMainOrders()
             .then((ordersResponse) => {
               const objOrdersResponse = JSON.parse(ordersResponse);
               console.log( 'objOrdersResponse.orders:' + objOrdersResponse.orders.length);
@@ -107,7 +107,7 @@ const operations = {
                     console.log(3);
                     const productId = lineItem.product_id;
                     console.log('productId:'+productId);
-                    if (productIds.indexOf(productId) != -1) {
+                    if (productIds.indexOf(productId) != -1 && lineItem.sku == 'subscription-app-sku') {
                       isSubscpriptionOrder = true;
                     }
                   });
