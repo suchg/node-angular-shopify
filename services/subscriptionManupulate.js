@@ -99,7 +99,7 @@ const operations = {
               const orders = objOrdersResponse.orders.filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
-                console.log(lineItems);
+                console.log(order.source_name);
                 console.log(1);
                 if (order.source_name != 'subscription-app') {
                   console.log(2);
