@@ -22,6 +22,15 @@ var mysqlCOnnectionStringProvider = {
                 console.log('Connection closed successfully.');
             });
         }
+    },
+    getPool: () => {
+        var pool  = mysql.createPool(
+                                      { 
+                                        ...{connectionLimit : 10},
+                                        ...mysqlConnectionString.mysqlConnectionString.connection.dev
+                                      }
+                                    );
+        return pool;
     }
 }
 
