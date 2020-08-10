@@ -32,13 +32,13 @@ global.appHost = 'unlikely-florist-subscription.herokuapp.com';
 var cpuCount = require('os').cpus().length;
 console.log('>>>>>>>'+cpuCount);
 
-cron.schedule('*/5 * * * * *', () => {
-  subscriptionManupulate.operations.startSubscriptionPolling();
-});
+// cron.schedule('*/5 * * * * *', () => {
+//   subscriptionManupulate.operations.startSubscriptionPolling();
+// });
 
-cron.schedule('*/3 * * * * *', () => {
-  subscriptionManupulate.operations.raiseOrdersPolling();
-});
+// cron.schedule('*/3 * * * * *', () => {
+//   subscriptionManupulate.operations.raiseOrdersPolling();
+// });
 
 
 const httpsOptions = {
