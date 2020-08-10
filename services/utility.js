@@ -12,6 +12,7 @@ const utility = {
       })
       .catch( (error) => {
         console.log('error in session extension');
+        console.log(error);
       } );
   }
 }
