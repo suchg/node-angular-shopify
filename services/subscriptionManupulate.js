@@ -66,7 +66,7 @@ const operations = {
             let currentDate = moment();
             const frequency = response.subscriptionFrequency; // consider a week
             const duration = response.subscriptionDuration; // consider 3 months
-            let lastDate = moment().add(duration, 'd');
+            let lastDate = moment().add(duration, 'M');
             let arrDates = [];
             while (currentDate < lastDate) {
               currentDate.add(frequency, 'd');
