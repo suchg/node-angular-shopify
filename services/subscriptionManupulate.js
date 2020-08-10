@@ -36,6 +36,7 @@ const operations = {
           $getDuration = discountController.discountApp.fetchDurationMaster(undefined, undefined, subscriptionDurationID);
           Promise.all([$getFrequency, $getDuration])
             .then(response => {
+              console.log(response);
               if( response ) {
                 response[0].forEach((elm) => {
                   subscriptionFrequency = Number(elm.frequency);
@@ -46,7 +47,7 @@ const operations = {
                 });
                 resolve( { subscriptionFrequency, subscriptionDuration } );
               } else {
-                resolve({});
+                resolve('');
               }
             })
             .catch(error => {
@@ -62,17 +63,21 @@ const operations = {
     return new Promise((resolve, reject) => {
       operations.getMetaFields(productId, variantId)
         .then((response) => {
-          let currentDate = moment();
-          const frequency = response.subscriptionFrequency; // consider a week
-          const duration = response.subscriptionDuration; // consider 3 months
-          let lastDate = moment().add(duration, 'd');
-          let arrDates = [];
-          while (currentDate < lastDate) {
-            currentDate.add(frequency, 'd');
-            let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
-            arrDates.push(date);
+          if(response) {
+            let currentDate = moment();
+            const frequency = response.subscriptionFrequency; // consider a week
+            const duration = response.subscriptionDuration; // consider 3 months
+            let lastDate = moment().add(duration, 'd');
+            let arrDates = [];
+            while (currentDate < lastDate) {
+              currentDate.add(frequency, 'd');
+              let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
+              arrDates.push(date);
+            }
+            resolve(arrDates);
+          } else {
+            resolve('');
           }
-          resolve(arrDates);
         })
         .catch((error) => {
           reject(error);
@@ -90,27 +95,22 @@ const operations = {
         .then((productsResponse) => {
           const objProductsResponse = JSON.parse(productsResponse);
           const products = objProductsResponse.products;
-          console.log("length:"+products.length);
+          // console.log("length:"+products.length);
           productIds = products.map((elm) => elm.id);
           // console.log('step 1');
           // console.log( Array.isArray( prodIds) );
           // console.log( prodIds.join() );
-          console.log(productIds);
+          // console.log(productIds);
           productController.productShopify.getSubscriptionMainOrders()
             .then((ordersResponse) => {
               const objOrdersResponse = JSON.parse(ordersResponse);
-              console.log( 'objOrdersResponse.orders:' + objOrdersResponse.orders.length);
+              // console.log( 'objOrdersResponse.orders:' + objOrdersResponse.orders.length);
               const orders = objOrdersResponse.orders.filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
-                console.log(order.source_name);
-                console.log(1);
                 if (order.source_name != 'subscription-app') {
-                  console.log(2);
                   lineItems.forEach((lineItem) => {
-                    console.log(3);
                     const productId = lineItem.product_id;
-                    console.log('productId:'+productId);
                     if (productIds.indexOf(productId) != -1 && lineItem.sku == 'subscription-app-sku') {
                       isSubscpriptionOrder = true;
                     }
@@ -119,7 +119,6 @@ const operations = {
                 return isSubscpriptionOrder;
               });
               // console.log('step 2');
-              console.log('resolved:' + orders.length);
               resolve(orders);
             })
             .catch((error) => {
@@ -202,13 +201,18 @@ const operations = {
           });
 
           // insert into OrderToPlace
+          console.log(1);
           const lineItems = order.line_items || [];
           lineItems.forEach((lineItem) => {
+            console.log(2);
             const productId = lineItem.product_id;
             const variantId = lineItem.variant_id;
             if (productIds.indexOf(productId) != -1) {
+              console.log(3);
               operations.getSubscriptionRange(productId, variantId)
               .then( (response) => {
+                console.log(4);
+                console.log(response);
                 const arrDateRange = response;
                 let strInsertOrderToPlace = `insert into orderstoplace ( orderId, productId, orderPlaced, orderToPlaceDate, udpateDate, createdDate )
                               values`;
