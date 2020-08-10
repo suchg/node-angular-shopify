@@ -8,6 +8,7 @@ var dbcon = require('../dao/dbcon');
 var moment = require('moment');
 let productIds = [];
 var cron = require('node-cron');
+var utility = require('./utility');
 
 const operations = {
   getMetaFields: (productId, variantId) => {
@@ -265,6 +266,13 @@ const operations = {
         operations.raiseOrdersPolling();
       }
     });
+
+    cron.schedule('*/20 * * * * *', () => {
+      if( global.shop ) {
+        utility.callApp();
+      }
+    });
+
   }
 }
 

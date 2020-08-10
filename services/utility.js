@@ -14,6 +14,16 @@ const utility = {
         console.log('error in session extension');
         console.log(error);
       } );
+  },
+  callApp : () => {
+    request.get( `https://${global.appHost}` )
+      .then((data) => {
+        console.log('app session extended');
+      })
+      .catch( (error) => {
+        console.log('error in app session extension');
+        console.log(error);
+      } );
   }
 }
 
