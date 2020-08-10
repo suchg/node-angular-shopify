@@ -252,7 +252,9 @@ const operations = {
     })
   },
   startCron: () => {
+    console.log('call startCron');
     cron.schedule('*/5 * * * * *', () => {
+      console.log('shop:' + global.shop);
       if( global.shop ) {
         operations.startSubscriptionPolling();
       }
