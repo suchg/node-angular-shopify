@@ -84,6 +84,7 @@ const operations = {
         .then((productsResponse) => {
           const objProductsResponse = JSON.parse(productsResponse);
           const products = objProductsResponse.products;
+          console.log("length:"+products.length);
           productIds = products.map((elm) => elm.id);
           // console.log('step 1');
           // console.log( Array.isArray( prodIds) );
