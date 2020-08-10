@@ -1,5 +1,5 @@
 var connectionProvider = require('./mysqlConnectionStringProvider.js');
-// var connection = connectionProvider.mysqlCOnnectionStringProvider.getMysqlConnection();
+var connection = connectionProvider.mysqlCOnnectionStringProvider.getMysqlConnection();
 
 const dbcon = {
   update: (data, onCallBack) => {
