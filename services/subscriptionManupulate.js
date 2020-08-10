@@ -99,8 +99,12 @@ const operations = {
               const orders = objOrdersResponse.orders.filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
+                console.log(lineItems);
+                console.log(1);
                 if (order.source_name != 'subscription-app') {
+                  console.log(2);
                   lineItems.forEach((lineItem) => {
+                    console.log(3);
                     const productId = lineItem.product_id;
                     console.log('productId:'+productId);
                     if (productIds.indexOf(productId) != -1) {
