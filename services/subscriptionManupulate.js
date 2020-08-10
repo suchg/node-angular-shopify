@@ -91,7 +91,7 @@ const operations = {
           // console.log('step 1');
           // console.log( Array.isArray( prodIds) );
           // console.log( prodIds.join() );
-          // console.log(prodIds);
+          console.log(prodIds);
           productController.productShopify.getSubscriptionOrders()
             .then((ordersResponse) => {
               const objOrdersResponse = JSON.parse(ordersResponse);
@@ -101,6 +101,7 @@ const operations = {
                 if (order.source_name != 'subscription-app') {
                   lineItems.forEach((lineItem) => {
                     const productId = lineItem.product_id;
+                    console.log('productId:'+productId);
                     if (productIds.indexOf(productId) != -1) {
                       isSubscpriptionOrder = true;
                     }
@@ -254,20 +255,20 @@ const operations = {
   },
   startCron: () => {
     console.log('call startCron');
-    cron.schedule('*/5 * * * * *', () => {
+    cron.schedule('0 */1 * * * *', () => {
       console.log('shop:' + global.shop);
       if( global.shop ) {
         operations.startSubscriptionPolling();
       }
     });
 
-    cron.schedule('*/3 * * * * *', () => {
+    cron.schedule('0 */1 * * * *', () => {
       if( global.shop ) {
         operations.raiseOrdersPolling();
       }
     });
 
-    cron.schedule('*/20 * * * * *', () => {
+    cron.schedule('0 */25 * * * *', () => {
       if( global.shop ) {
         utility.callApp();
       }
