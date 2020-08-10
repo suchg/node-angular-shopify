@@ -94,16 +94,10 @@ const operations = {
         .then((productsResponse) => {
           const objProductsResponse = JSON.parse(productsResponse);
           const products = objProductsResponse.products;
-          // console.log("length:"+products.length);
           productIds = products.map((elm) => elm.id);
-          // console.log('step 1');
-          // console.log( Array.isArray( prodIds) );
-          // console.log( prodIds.join() );
-          // console.log(productIds);
           productController.productShopify.getSubscriptionMainOrders()
             .then((ordersResponse) => {
               const objOrdersResponse = JSON.parse(ordersResponse);
-              // console.log( 'objOrdersResponse.orders:' + objOrdersResponse.orders.length);
               const orders = objOrdersResponse.orders.filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
@@ -117,17 +111,14 @@ const operations = {
                 }
                 return isSubscpriptionOrder;
               });
-              // console.log('step 2');
               resolve(orders);
             })
             .catch((error) => {
-              // console.error(error);
               reject(error);
             });
 
         })
         .catch((error) => {
-          // console.error(error);
           reject(error);
         });
     });
@@ -146,13 +137,9 @@ const operations = {
             return;
           }
 
-          // orderIds.push(12312321);
           const strSelect = `select orderId from subscription where orderId in ( ${orderIds.join()} )`
-          // console.log(strSelect);
           dbcon.select({ query: strSelect }, function (data) {
-            // console.log(data);
             const resultOrderids = data.result.map((order) => order.orderId);
-            // console.log(resultOrderids);
             if (resultOrderids.length > 0) {
               orderIds.forEach((orderId) => {
                 if (resultOrderids.indexOf(orderId) == -1) {
@@ -168,15 +155,11 @@ const operations = {
                 return order;
               }
             });
-            // console.log(newOrderObjects);
-
-
             resolve(newOrderObjects);
           });
         })
         .catch((error) => {
           reject(error);
-          // console.error(error);
         });
 
     });
@@ -190,28 +173,21 @@ const operations = {
       .then((orders) => {
         orders.forEach((order) => {
           // inser into subscription
-          // console.log('subscription insert');
           const currentDateTime = dbcon.connection.escape(new Date());
           const strInsertSubscription = `insert into subscription ( orderId, orderData, userEmail, udpateDate, createdDate )
         values( ${Number(order.id)}, ${dbcon.connection.escape(JSON.stringify(order))}, ${dbcon.connection.escape(order.email)}, ${currentDateTime}, ${currentDateTime} )`;
           dbcon.update({ query: strInsertSubscription }, function (result) {
             console.log('Subscription insertion executed');
-            // console.log(result);
           });
 
           // insert into OrderToPlace
-          console.log(1);
           const lineItems = order.line_items || [];
           lineItems.forEach((lineItem) => {
-            console.log(2);
             const productId = lineItem.product_id;
             const variantId = lineItem.variant_id;
             if (productIds.indexOf(productId) != -1) {
-              console.log(3);
               operations.getSubscriptionRange(productId, variantId)
               .then( (response) => {
-                console.log(4);
-                console.log(response);
                 const arrDateRange = response;
                 let strInsertOrderToPlace = `insert into orderstoplace ( orderId, productId, orderPlaced, orderToPlaceDate, udpateDate, createdDate )
                               values`;
@@ -222,11 +198,8 @@ const operations = {
                 });
                 strInsertOrderToPlace += arrValues.join();
 
-                // console.log(strInsertOrderToPlace);
-                // console.log(strInsertOrderToPlace);
                 dbcon.update({ query: strInsertOrderToPlace }, function (result) {
                   console.log('Orders insertion executed');
-                  // console.log(result);
                 });
               } )
               .catch( (error) => {
@@ -246,9 +219,7 @@ const operations = {
     const startDate = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
     const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
     const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`
-    console.log(strSelect);
     dbcon.select({ query: strSelect }, function (data) {
-      // console.log(data);
       data.result.forEach((row) => {
         const orderToPlaceId = row.id;
         const orderId = row.orderId;
@@ -256,7 +227,7 @@ const operations = {
         if (productId, orderId) {
           productController.productShopify.createNewOrder(productId, orderId)
             .then((data) => {
-              // console.log(data);
+              console.log('order placed');
               productController.productApp.updateOrderPlaced(orderToPlaceId);
             })
             .catch((error) => {
@@ -264,23 +235,20 @@ const operations = {
             })
         }
       })
-      // const resultOrderids = data.result.map((order) => order.orderId);
     })
   },
   startCron: () => {
-    console.log('call startCron');
     cron.schedule('0 */1 * * * *', () => {
-      console.log('shop:' + global.shop);
       if( global.shop ) {
         operations.startSubscriptionPolling();
       }
     });
 
-    // cron.schedule('0 */1 * * * *', () => {
-    //   if( global.shop ) {
-    //     operations.raiseOrdersPolling();
-    //   }
-    // });
+    cron.schedule('0 */1 * * * *', () => {
+      if( global.shop ) {
+        operations.raiseOrdersPolling();
+      }
+    });
 
     cron.schedule('0 */25 * * * *', () => {
       if( global.shop ) {
