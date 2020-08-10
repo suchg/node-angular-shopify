@@ -95,6 +95,7 @@ const operations = {
           productController.productShopify.getSubscriptionOrders()
             .then((ordersResponse) => {
               const objOrdersResponse = JSON.parse(ordersResponse);
+              console.log( 'objOrdersResponse.orders:' + objOrdersResponse.orders.length);
               const orders = objOrdersResponse.orders.filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;

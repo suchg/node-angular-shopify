@@ -1,7 +1,7 @@
 var connectionProvider = require('./mysqlConnectionStringProvider.js');
 // var connection = { escape: () => { return ''; } }; // connectionProvider.mysqlCOnnectionStringProvider.getMysqlConnection();
 var pool = connectionProvider.mysqlCOnnectionStringProvider.getPool();
-var mysql      = require('mysql');
+var mysql = require('mysql');
 const dbcon = {
   update: (data, onCallBack) => {
     // connection.query('UPDATE `employee` SET `employee_name`=?,`employee_salary`=?,`employee_age`=? where `id`=?', [req.body.employee_name,req.body.employee_salary, req.body.employee_age, req.body.id], function (error, results, fields) {
