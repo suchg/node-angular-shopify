@@ -136,8 +136,7 @@ const productApp = {
   getUpcomingOrders: ( from, limit, user ) => {
     const promise = new Promise((resolve, reject) => {
     let strSelect = '';
-    console.log(user);  
-    if (user) {
+    if (user && user != undefined && user != 'undefined') {
         strSelect = `select t1.id, t1.orderId, t1.productId, t1.orderToPlaceDate, t2.orderData from orderstoplace as t1
         left join subscription as t2 on t1.orderId = t2.orderId where
         t1.orderPlaced = 0 and
