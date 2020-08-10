@@ -36,13 +36,12 @@ const operations = {
           $getDuration = discountController.discountApp.fetchDurationMaster(undefined, undefined, subscriptionDurationID);
           Promise.all([$getFrequency, $getDuration])
             .then(response => {
-              console.log(response);
               if( response ) {
-                response[0].forEach((elm) => {
+                response[0].result.forEach((elm) => {
                   subscriptionFrequency = Number(elm.frequency);
                 });
 
-                response[1].forEach((elm) => {
+                response[1].result.forEach((elm) => {
                   subscriptionDuration = Number(elm.duration);
                 });
                 resolve( { subscriptionFrequency, subscriptionDuration } );
