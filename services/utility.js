@@ -6,7 +6,7 @@ const productController = require('./controller/productController');
 
 const utility = {
   callShopifyCallBack : () => {
-    request.get( `${global.shop}/shopify?shop=unlikelyflorist-com.myshopify.com` )
+    request.get( `https://${global.shop}/shopify?shop=unlikelyflorist-com.myshopify.com` )
       .then((data) => {
         console.log('session extended');
       })

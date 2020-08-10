@@ -26,6 +26,7 @@ var moment = require('moment');
 var os = require('os');
 var cluster = require('cluster');
 var utility = require('./services/utility');
+global.shop = 'unlikelyflorist-com.myshopify.com';
 
 // Count the machine's CPUs
 var cpuCount = require('os').cpus().length;
@@ -49,7 +50,7 @@ const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET_KEY;
 const port = process.env.PORT;
 const scopes = 'read_products,write_products,read_orders,write_orders,read_customers,read_discounts,write_discounts,read_price_rules,write_price_rules';
-const forwardingAddress = "https://103.102.234.108/"; // Replace this with your HTTPS Forwarding address
+// const forwardingAddress = "https://103.102.234.108/"; // Replace this with your HTTPS Forwarding address
 // var httpsServer = createServer(httpsOptions, app);
 var httpsServer = createServer(app);
 
