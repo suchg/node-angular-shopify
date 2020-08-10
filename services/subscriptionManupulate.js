@@ -254,13 +254,13 @@ const operations = {
   startCron: () => {
     cron.schedule('*/5 * * * * *', () => {
       if( global.shop ) {
-        subscriptionManupulate.operations.startSubscriptionPolling();
+        operations.startSubscriptionPolling();
       }
     });
 
     cron.schedule('*/3 * * * * *', () => {
       if( global.shop ) {
-        subscriptionManupulate.operations.raiseOrdersPolling();
+        operations.raiseOrdersPolling();
       }
     });
   }
