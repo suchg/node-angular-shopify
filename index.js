@@ -26,7 +26,7 @@ var moment = require('moment');
 var os = require('os');
 var cluster = require('cluster');
 var utility = require('./services/utility');
-global.shop = 'unlikelyflorist-com.myshopify.com';
+global.appHost = 'unlikely-florist-subscription.herokuapp.com';
 
 // Count the machine's CPUs
 var cpuCount = require('os').cpus().length;
