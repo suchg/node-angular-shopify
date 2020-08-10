@@ -276,11 +276,11 @@ const operations = {
       }
     });
 
-    cron.schedule('0 */1 * * * *', () => {
-      if( global.shop ) {
-        operations.raiseOrdersPolling();
-      }
-    });
+    // cron.schedule('0 */1 * * * *', () => {
+    //   if( global.shop ) {
+    //     operations.raiseOrdersPolling();
+    //   }
+    // });
 
     cron.schedule('0 */25 * * * *', () => {
       if( global.shop ) {
