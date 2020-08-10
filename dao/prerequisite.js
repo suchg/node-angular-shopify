@@ -36,7 +36,7 @@ var prerequisiteDao = {
       createdDate DATETIME
     )`;
 
-    const createVariantMaster = `create table if not exists variantMaster(
+    const createVariantMaster = `create table if not exists variantmaster(
       id int primary key auto_increment,
       variantTitle varchar(1000) not null,
       variantKey  varchar(1000) not null,
@@ -46,7 +46,7 @@ var prerequisiteDao = {
       createdDate DATETIME
     )`;
 
-    const createOptionMaster = `create table if not exists optionMaster(
+    const createOptionMaster = `create table if not exists optionmaster(
       id int primary key,
       optionTitle varchar(1000) not null,
       optionDescription varchar(1000) not null,
@@ -54,14 +54,14 @@ var prerequisiteDao = {
       createdDate DATETIME
     )`;
 
-    const createCollectionMaster = `create table if not exists collectionMaster(
+    const createCollectionMaster = `create table if not exists collectionmaster(
       id int primary key auto_increment,
       title varchar(1000) not null,
       udpateDate DATETIME,
       createdDate DATETIME
     )`;
 
-    const createFrequencyMaster = `create table if not exists frequencyMaster(
+    const createFrequencyMaster = `create table if not exists frequencymaster(
       id int primary key,
       title varchar(1000) not null,
       frequency int not null,
@@ -69,7 +69,7 @@ var prerequisiteDao = {
       createdDate DATETIME
     )`;
 
-    const createDurationMaster = `create table if not exists durationMaster(
+    const createDurationMaster = `create table if not exists durationmaster(
       id int primary key,
       title varchar(1000) not null,
       duration BIGINT not null,
@@ -77,7 +77,7 @@ var prerequisiteDao = {
       createdDate DATETIME
     )`;
 
-    const createOrdersToPlace = `create table if not exists ordersToPlace(
+    const createOrdersToPlace = `create table if not exists orderstoplace(
       id int primary key auto_increment,
       orderId BIGINT not null,
       productId BIGINT not null,
@@ -88,17 +88,17 @@ var prerequisiteDao = {
     )`;
 
     const currentDateTime = dbcon.connection.escape( new Date() );
-    const insertDefaultOptions = ` insert IGNORE into optionMaster ( id, optionTitle, optionDescription, udpateDate, createdDate ) 
+    const insertDefaultOptions = ` insert IGNORE into optionmaster ( id, optionTitle, optionDescription, udpateDate, createdDate ) 
     values(1, 'option1', '', ${ currentDateTime }, ${ currentDateTime }),
           (2, 'option2', '', ${ currentDateTime }, ${ currentDateTime }),
           (3, 'option3', '', ${ currentDateTime }, ${ currentDateTime });`
 
-    const insertDefaultFrequency = ` insert IGNORE into frequencyMaster ( id, title, frequency, udpateDate, createdDate ) 
+    const insertDefaultFrequency = ` insert IGNORE into frequencymaster ( id, title, frequency, udpateDate, createdDate ) 
     values(1, 'weekly', 5, ${ currentDateTime }, ${ currentDateTime }),
           (2, 'bi-weekly', 10, ${ currentDateTime }, ${ currentDateTime }),
           (3, 'monthly', 30, ${ currentDateTime }, ${ currentDateTime });`
 
-    const insertDefaultDuration = ` insert IGNORE into durationMaster ( id, title, duration, udpateDate, createdDate ) 
+    const insertDefaultDuration = ` insert IGNORE into durationmaster ( id, title, duration, udpateDate, createdDate ) 
     values(1, '3 months', 90, ${ currentDateTime }, ${ currentDateTime }),
           (2, '6 months', 180, ${ currentDateTime }, ${ currentDateTime }),
           (3, 'Year', 365, ${ currentDateTime }, ${ currentDateTime }),

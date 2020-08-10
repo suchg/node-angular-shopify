@@ -36,14 +36,18 @@ const operations = {
           $getDuration = discountController.discountApp.fetchDurationMaster(undefined, undefined, subscriptionDurationID);
           Promise.all([$getFrequency, $getDuration])
             .then(response => {
-              response[0].forEach((elm) => {
-                subscriptionFrequency = Number(elm.frequency);
-              });
+              if( response ) {
+                response[0].forEach((elm) => {
+                  subscriptionFrequency = Number(elm.frequency);
+                });
 
-              response[1].forEach((elm) => {
-                subscriptionDuration = Number(elm.duration);
-              });
-              resolve( { subscriptionFrequency, subscriptionDuration } );
+                response[1].forEach((elm) => {
+                  subscriptionDuration = Number(elm.duration);
+                });
+                resolve( { subscriptionFrequency, subscriptionDuration } );
+              } else {
+                resolve({});
+              }
             })
             .catch(error => {
               reject(error);
@@ -206,7 +210,7 @@ const operations = {
               operations.getSubscriptionRange(productId, variantId)
               .then( (response) => {
                 const arrDateRange = response;
-                let strInsertOrderToPlace = `insert into ordersToPlace ( orderId, productId, orderPlaced, orderToPlaceDate, udpateDate, createdDate )
+                let strInsertOrderToPlace = `insert into orderstoplace ( orderId, productId, orderPlaced, orderToPlaceDate, udpateDate, createdDate )
                               values`;
                 let arrValues = [];
                 arrDateRange.forEach((date) => {
@@ -238,7 +242,7 @@ const operations = {
     let currentDate = moment().subtract(1, 'm');
     const startDate = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
     const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
-    const strSelect = `select * from ordersToPlace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`
+    const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`
     console.log(strSelect);
     dbcon.select({ query: strSelect }, function (data) {
       // console.log(data);

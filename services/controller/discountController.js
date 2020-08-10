@@ -53,7 +53,7 @@ const discountApp = {
                            update optionMaster set optionDescription = ${ option2Title } where optionTitle = 'option2';
                            update optionMaster set optionDescription = ${ option3Title } where optionTitle = 'option3';`;
       */
-      const updateQuery = `update optionMaster set optionDescription = case optionTitle 
+      const updateQuery = `update optionmaster set optionDescription = case optionTitle 
                                                                        when 'option1' then  ${ option1Title }
                                                                        when 'option2' then  ${ option2Title }
                                                                        when 'option3' then  ${ option3Title }
@@ -129,7 +129,7 @@ const discountApp = {
   },
   fetchVariantMaster: (res, req, options) => {
     return new Promise((resolve, reject) => {
-      const query = 'select t1.id, t1.variantTitle, t1.variantKey, t1.note, t1.optionId, t2.optionTitle from variantMaster as t1 left join optionMaster as t2 on t1.optionId = t2.id';
+      const query = 'select t1.id, t1.variantTitle, t1.variantKey, t1.note, t1.optionId, t2.optionTitle from variantMaster as t1 left join optionmaster as t2 on t1.optionId = t2.id';
       dbcon.select({ query }, (data) => {
         resolve(data);
       });
@@ -137,7 +137,7 @@ const discountApp = {
   },
   fetchOptionMaster: (res, req, options) => {
     return new Promise((resolve, reject) => {
-      const query = 'select id, optionTitle, optionDescription, udpateDate, createdDate from optionMaster';
+      const query = 'select id, optionTitle, optionDescription, udpateDate, createdDate from optionmaster';
       dbcon.select({query}, (data)=>{
         resolve(data);
       });
@@ -145,7 +145,7 @@ const discountApp = {
   },
   fetchFrequencyMaster: (res, req, id) => {
     return new Promise((resolve, reject) => {
-      let query = 'select * from frequencyMaster';
+      let query = 'select * from frequencymaster';
       if( id ) {
         query += ` where id = ${id}`;
       }
@@ -156,7 +156,7 @@ const discountApp = {
   },
   fetchDurationMaster: (res, req, id) => {
     return new Promise((resolve, reject) => {
-      let query = 'select * from durationMaster';
+      let query = 'select * from durationmaster';
       if( id ) {
         query += ` where id = ${id}`;
       }
