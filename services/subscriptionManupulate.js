@@ -249,6 +249,19 @@ const operations = {
       })
       // const resultOrderids = data.result.map((order) => order.orderId);
     })
+  },
+  startCron: () => {
+    cron.schedule('*/5 * * * * *', () => {
+      if( global.shop ) {
+        subscriptionManupulate.operations.startSubscriptionPolling();
+      }
+    });
+
+    cron.schedule('*/3 * * * * *', () => {
+      if( global.shop ) {
+        subscriptionManupulate.operations.raiseOrdersPolling();
+      }
+    });
   }
 }
 
