@@ -23,6 +23,12 @@ var subscriptionManupulate = require('./services/subscriptionManupulate');
 var authService = require('./services/auth');
 var cron = require('node-cron');
 var moment = require('moment');
+var os = require('os');
+var cluster = require('cluster');
+
+// Count the machine's CPUs
+var cpuCount = require('os').cpus().length;
+console.log('>>>>>>>'+cpuCount);
 
 cron.schedule('*/5 * * * * *', () => {
   subscriptionManupulate.operations.startSubscriptionPolling();

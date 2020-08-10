@@ -220,7 +220,7 @@ const operations = {
         });
       })
       .catch((error) => {
-        console.error(error.statusCode, error.error.error_description);
+        console.error(error);
       });
   },
   raiseOrdersPolling: () => {
