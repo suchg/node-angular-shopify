@@ -25,6 +25,7 @@ var cron = require('node-cron');
 var moment = require('moment');
 var os = require('os');
 var cluster = require('cluster');
+var utility = require('./services/utility');
 
 // Count the machine's CPUs
 var cpuCount = require('os').cpus().length;
@@ -52,9 +53,9 @@ const forwardingAddress = "https://103.102.234.108/"; // Replace this with your 
 // var httpsServer = createServer(httpsOptions, app);
 var httpsServer = createServer(app);
 
-// // cron job to extend session
+// cron job to extend session
 // cron.schedule('*/10 * * * * *', () => {
-//   request.get( `${forwardingAddress}shopify?shop=unlikelyflorist-com.myshopify.com` )
+//   request.get( `${global.shop}/shopify?shop=unlikelyflorist-com.myshopify.com` )
 //   .then((data) => {
 //     console.log('session extended');
 //   })
@@ -72,6 +73,7 @@ app.use(express.static('./public'));
 httpsServer.listen(port, () => {
   console.log('Subscription app is listening on port' + port);
   prerequisiteDao.init();
+  utility.callShopifyCallBack();
 });
 
 app.use(authService);
