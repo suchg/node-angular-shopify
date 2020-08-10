@@ -161,15 +161,15 @@ const operations = {
               newOrderIds = orderIds;
             }
 
-            // const newOrders = orders.filter((order) => {
-            //   if (newOrderIds.indexOf(order.id) !== -1) {
-            //     return order;
-            //   }
-            // });
-            // console.log(newOrders);
+            const newOrderObjects = orders.filter((order) => {
+              if (newOrderIds.indexOf(order.id) !== -1) {
+                return order;
+              }
+            });
+            // console.log(newOrderObjects);
 
 
-            resolve(newOrderIds);
+            resolve(newOrderObjects);
           });
         })
         .catch((error) => {
