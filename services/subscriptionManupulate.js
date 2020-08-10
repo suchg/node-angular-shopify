@@ -107,7 +107,7 @@ const operations = {
                 return isSubscpriptionOrder;
               });
               // console.log('step 2');
-              // console.log(orders);
+              console.log('resolved:' + orders.length);
               resolve(orders);
             })
             .catch((error) => {
