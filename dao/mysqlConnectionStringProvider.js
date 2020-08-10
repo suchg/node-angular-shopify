@@ -8,7 +8,7 @@ var mysqlCOnnectionStringProvider = {
 
         connection.connect(function(err){
             if(err){
-                throw err;
+                console.error(err);
             }
             console.log('Connected successfully.');
         });
@@ -18,7 +18,7 @@ var mysqlCOnnectionStringProvider = {
     closeMysqlConnection: function closeMysqlConnection ( currentConnectionObject ){
         if( currentConnectionObject ) {
             currentConnectionObject.end(function(err){
-                if(err) { throw err; }
+                if(err) { console.error(err); }
                 console.log('Connection closed successfully.');
             });
         }
