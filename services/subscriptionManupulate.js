@@ -220,7 +220,7 @@ const operations = {
     // const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
     // const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`;
     const strSelect = `select * from orderstoplace where date(orderToPlaceDate) = CURDATE() and orderPlaced != 1`;
-    console.log(strSelect);
+    // console.log(strSelect);
     dbcon.select({ query: strSelect }, function (data) {
       data.result.forEach((row) => {
         const orderToPlaceId = row.id;
@@ -229,8 +229,9 @@ const operations = {
         if (productId, orderId) {
           productController.productShopify.createNewOrder(productId, orderId)
             .then((data) => {
-              console.log('order placed');
+              console.log('order placed ' + orderToPlaceId);
               productController.productApp.updateOrderPlaced(orderToPlaceId);
+              console.log('order status updated ' + orderToPlaceId);
             })
             .catch((error) => {
               console.error(error.statusCode, error.error.error_description);
