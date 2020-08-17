@@ -215,10 +215,11 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
-    let currentDate = moment().subtract(1, 'm');
-    const startDate = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
-    const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
-    const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`;
+    // let currentDate = moment().subtract(1, 'm');
+    // const startDate = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
+    // const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
+    // const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`;
+    const strSelect = `select * from orderstoplace where date(orderToPlaceDate) = CURDATE() and orderPlaced != 1`;
     console.log(strSelect);
     dbcon.select({ query: strSelect }, function (data) {
       data.result.forEach((row) => {
