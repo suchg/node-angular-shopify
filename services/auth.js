@@ -26,7 +26,7 @@ router.get('/shopify', (req, res) => {
       '&redirect_uri=' + redirectUri;
     console.log('>>' + shop);
     res.cookie("shopOrigin", shop, { httpOnly: false });
-    res.cookie('state', state);
+    res.cookie('state', state, { httpOnly: false, secure: true, sameSite: "none" });
     res.redirect(installUrl);
   } else {
     return res.status(400).send('Missing shop parameter. Please add ?shop=your-development-shop.myshopify.com to your request');
