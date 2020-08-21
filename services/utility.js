@@ -3,6 +3,7 @@ var router = express.Router();
 const request = require('request-promise');
 const service = require('./request')
 const productController = require('./controller/productController');
+var moment = require('moment');
 
 const utility = {
   callShopifyCallBack : () => {
@@ -24,6 +25,25 @@ const utility = {
         console.log('error in app session extension');
         console.log(error);
       } );
+  },
+  getRecurringStartDate: () => {
+    let currentDate = moment();
+    let dayName = currentDate.format('dddd');
+    let returRecurringStartDate = moment();
+    switch (dayName) {
+      case 'Monday':
+      case 'Tuesday':
+      case 'Wednesday':
+      case 'Saturday':
+      case 'Sunday':
+        returRecurringStartDate = currentDate.day(5);
+      break;
+      case 'Thursday':
+      case 'Friday':
+        returRecurringStartDate = currentDate.day(12);
+      break;
+    }
+    return returRecurringStartDate;
   }
 }
 

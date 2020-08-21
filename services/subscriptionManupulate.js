@@ -63,7 +63,7 @@ const operations = {
       operations.getMetaFields(productId, variantId)
         .then((response) => {
           if(response) {
-            let currentDate = moment();
+            let currentDate = utility.getRecurringStartDate();
             const frequency = response.subscriptionFrequency; // consider a week
             const duration = response.subscriptionDuration; // consider 3 months
             let lastDate = moment().add(duration, 'M');
@@ -247,11 +247,11 @@ const operations = {
       }
     });
 
-    cron.schedule('0 */1 * * * *', () => {
-      if( global.shop ) {
-        operations.raiseOrdersPolling();
-      }
-    });
+    // cron.schedule('0 */1 * * * *', () => {
+    //   if( global.shop ) {
+    //     operations.raiseOrdersPolling();
+    //   }
+    // });
 
     cron.schedule('0 */25 * * * *', () => {
       if( global.shop ) {
