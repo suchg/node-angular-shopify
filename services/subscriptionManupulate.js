@@ -64,6 +64,7 @@ const operations = {
         .then((response) => {
           if(response) {
             let currentDate = utility.getRecurringStartDate();
+            console.log( "currentDate: >> "+currentDate.format("YYYY-MM-DD HH:mm:ss").toString() );
             const frequency = response.subscriptionFrequency; // frequency defined in db in days, assuming 7 days a week
             const duration = response.subscriptionDuration; // duration defined in db in days, assuming 30 dyas a month
             let lastDate = moment().add(duration, 'd');
@@ -73,6 +74,7 @@ const operations = {
               let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
               arrDates.push(date);
             }
+            console.log( arrDates );
             resolve(arrDates);
           } else {
             resolve('');
