@@ -64,9 +64,9 @@ const operations = {
         .then((response) => {
           if(response) {
             let currentDate = utility.getRecurringStartDate();
-            const frequency = response.subscriptionFrequency; // consider a week
-            const duration = response.subscriptionDuration; // consider 3 months
-            let lastDate = moment().add(duration, 'M');
+            const frequency = response.subscriptionFrequency; // frequency defined in db in days, assuming 7 days a week
+            const duration = response.subscriptionDuration; // duration defined in db in days, assuming 30 dyas a month
+            let lastDate = moment().add(duration, 'd');
             let arrDates = [];
             while (currentDate < lastDate) {
               currentDate.add(frequency, 'd');
