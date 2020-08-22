@@ -141,13 +141,13 @@ const productApp = {
         left join subscription as t2 on t1.orderId = t2.orderId where
         t1.orderPlaced = 0 and
         t2.userEmail = ${ dbcon.connection.escape(user) }
-        ORDER BY id DESC
+        ORDER BY t1.orderToPlaceDate
         LIMIT ${from}, ${limit} `;
       } else {
         strSelect = `select t1.id, t1.orderId, t1.productId, t1.orderToPlaceDate, t2.orderData from orderstoplace as t1
                       left join subscription as t2 on t1.orderId = t2.orderId where
                       t1.orderPlaced = 0
-                      ORDER BY id DESC
+                      ORDER BY t1.orderToPlaceDate
                       LIMIT ${from}, ${limit} `;
       }
       console.log(strSelect);
