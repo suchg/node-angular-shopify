@@ -1,0 +1,455 @@
+<div
+  class="d-flex justify-content-center loader"
+  *ngIf="loading"
+>
+  <div
+    class="spinner-border"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+
+<div class="container-fluid card p-0">
+  <div class="card-header">
+    <span>Configure master data for subscription options</span>
+    <button
+      class="btn btn-link float-right"
+      (click)="accordion.openAll()"
+    >Expand All</button>
+    <button
+      class="btn btn-link float-right"
+      (click)="accordion.closeAll()"
+    >Collapse All</button>
+  </div>
+  <div class="card-body p-0">
+    <section class="subscription-options">
+      <section class="option1 p-3">
+        <form>
+          <div class="row justify-content-md-left">
+            <div class="col form-group text-left">
+              <label> Option 1</label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              for="option1-title"
+              class="col-2 col-form-label"
+            >Option title</label>
+            <div class="col-2">
+              <input
+                type="text"
+                name="option1-title"
+                class="form-control"
+                id="inputPassword"
+                placeholder="Option title"
+                [formControl]="options.option1Title"
+              >
+            </div>
+          </div>
+
+          <mat-divider [inset]="true"></mat-divider>
+
+          <div class="row justify-content-md-left">
+            <div class="col">
+              <div class="form-group text-left">
+                <button
+                  type="button"
+                  class="btn btn-link float-right"
+                  (click)="addOption('option1')"
+                >Add Variant</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-md-left">
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Variant Key</label>
+              </div>
+            </div>
+          
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Variant Title</label>
+              </div>
+            </div>
+          
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Note</label>
+              </div>
+            </div>
+          
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Actions</label>
+              </div>
+            </div>
+          </div>
+
+
+          <div
+            class="row justify-content-md-left"
+            *ngFor="let option of options.option1; index as i;"
+          >
+            <div class="col-3">
+              <div class="form-group text-left">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option1-variant-key-{{i}}"
+                    placeholder=""
+                    [formControl]="option.variantKey"
+                  >
+                </div>
+                <mat-error *ngIf="option.variantKey.invalid && option.variantKey.touched">
+                  Enter valid variant key
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option1-variant-name-{{i}}"
+                    placeholder=""
+                    [formControl]="option.name"
+                  >
+                </div>
+                <mat-error *ngIf="option.name.invalid && option.name.touched">
+                  Enter valid variant title
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option1-variant-note-{{i}}"
+                    placeholder=""
+                    [formControl]="option.note"
+                  >
+                </div>
+                <mat-error *ngIf="option.note.invalid && option.note.touched">
+                  Enter valid variant title
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <button
+                  (click)="removeOption( 'option1', i)"
+                  type="button"
+                  class="btn btn-link"
+                >Remove</button>
+              </div>
+            </div>
+          </div>
+
+
+        </form>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <section class="option2 p-3">
+        <form>
+          <div class="row justify-content-md-left">
+            <div class="col form-group text-left">
+              <label> Option 2</label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              for="option2-title"
+              class="col-2 col-form-label"
+            >Option title</label>
+            <div class="col-2">
+              <input
+                type="text"
+                name="option2-title"
+                class="form-control"
+                id="option2-title"
+                placeholder="Option title"
+                [formControl]="options.option2Title"
+              >
+            </div>
+          </div>
+
+          <mat-divider [inset]="true"></mat-divider>
+
+          <div class="row justify-content-md-left">
+            <div class="col">
+              <div class="form-group text-left">
+                <button
+                  type="button"
+                  class="btn btn-link float-right"
+                  (click)="addOption('option2')"
+                >Add Variant</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-md-left">
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Variant Key</label>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Variant Title</label>
+              </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-group text-center">
+                  <label>Note</label>
+                </div>
+              </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Actions</label>
+              </div>
+            </div>
+          </div>
+
+
+          <div
+            class="row justify-content-md-left"
+            *ngFor="let option of options.option2; index as i;"
+          >
+            <div class="col-3">
+              <div class="form-group text-left">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option2-variant-key-{{i}}"
+                    placeholder=""
+                    [formControl]="option.variantKey"
+                  >
+                </div>
+                <mat-error *ngIf="option.variantKey.invalid && option.variantKey.touched">
+                  Enter valid variant key
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option2-variant-name-{{i}}"
+                    placeholder=""
+                    [formControl]="option.name"
+                  >
+                </div>
+                <mat-error *ngIf="option.name.invalid && option.name.touched">
+                  Enter valid variant title
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-group">
+                  <div class="input-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="formGroupExampleInput"
+                      name="option1-variant-note-{{i}}"
+                      placeholder=""
+                      [formControl]="option.note"
+                    >
+                  </div>
+                  <mat-error *ngIf="option.note.invalid && option.note.touched">
+                    Enter valid variant note
+                  </mat-error>
+                </div>
+              </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <button
+                  (click)="removeOption( 'option2', i)"
+                  type="button"
+                  class="btn btn-link"
+                >Remove</button>
+              </div>
+            </div>
+          </div>
+
+
+        </form>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <section class="option3 p-3">
+        <form>
+          <div class="row justify-content-md-left">
+            <div class="col form-group text-left">
+              <label> Option 3</label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              for="option3-title"
+              class="col-2 col-form-label"
+            >Option title</label>
+            <div class="col-2">
+              <input
+                type="text"
+                name="option3-title"
+                class="form-control"
+                id="inputPassword"
+                placeholder="Option title"
+                [formControl]="options.option3Title"
+              >
+            </div>
+          </div>
+
+          <mat-divider [inset]="true"></mat-divider>
+
+          <div class="row justify-content-md-left">
+            <div class="col">
+              <div class="form-group text-left">
+                <button
+                  type="button"
+                  class="btn btn-link float-right"
+                  (click)="addOption('option3')"
+                >Add Variant</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-md-left">
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Variant Key</label>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Variant Title</label>
+              </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-group text-center">
+                  <label>Note</label>
+                </div>
+              </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <label>Actions</label>
+              </div>
+            </div>
+          </div>
+
+
+          <div
+            class="row justify-content-md-left"
+            *ngFor="let option of options.option3; index as i;"
+          >
+            <div class="col-3">
+              <div class="form-group text-left">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option3-variant-key-{{i}}"
+                    placeholder=""
+                    [formControl]="option.variantKey"
+                  >
+                </div>
+                <mat-error *ngIf="option.variantKey.invalid && option.variantKey.touched">
+                  Enter valid variant key
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option3-variant-name-{{i}}"
+                    placeholder=""
+                    [formControl]="option.name"
+                  >
+                </div>
+                <mat-error *ngIf="option.name.invalid && option.name.touched">
+                  Enter valid variant title
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="option1-variant-note-{{i}}"
+                    placeholder=""
+                    [formControl]="option.note"
+                  >
+                </div>
+                <mat-error *ngIf="option.note.invalid && option.note.touched">
+                  Enter valid variant note
+                </mat-error>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group text-center">
+                <button
+                  (click)="removeOption( 'option3', i)"
+                  type="button"
+                  class="btn btn-link"
+                >Remove</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <div class="pt-2 pl-2 pb-2">
+        <button
+          type="button"
+          [disabled]="!validateFrom()"
+          class="btn btn-outline-primary"
+          (click)="updateVariantMaster()"
+        >Update</button>
+      </div>
+    </section>
+  </div>
+
+</div>

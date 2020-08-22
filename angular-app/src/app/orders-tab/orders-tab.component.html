@@ -1,0 +1,17 @@
+<br />
+<!-- <mat-divider></mat-divider> -->
+<mat-card>
+  <mat-tab-group>
+    <mat-tab label="Processed">
+      <ng-template matTabContent>
+        <app-processed-orders></app-processed-orders>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Upcoming">
+      <ng-template matTabContent>
+        <app-upcoming-orders></app-upcoming-orders>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Errors"> Errors </mat-tab>
+  </mat-tab-group>
+</mat-card>

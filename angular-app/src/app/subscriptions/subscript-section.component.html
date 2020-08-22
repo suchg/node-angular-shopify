@@ -1,0 +1,24 @@
+<div class="container-fluid card p-0">
+  <div class="card-header">
+    <button
+      *ngIf="viewMode == 'LIST'"
+      type="button"
+      class="btn btn-link float-right"
+      (click)="viewMode = 'ADD-NEW'"
+    >Add New</button>
+    <button
+      *ngIf="viewMode == 'ADD-NEW' || viewMode == 'UPDATE'"
+      type="button"
+      class="btn btn-link float-right"
+      (click)="viewMode = 'LIST'"
+    >Subscription List</button>
+  </div>
+  <div class="card-body p-0">
+    <section class="subscription-section">
+    <app-list-subscriptions *ngIf="viewMode == 'LIST'" (parentEvent)="onChildEvent($event)" ></app-list-subscriptions>
+    <app-create-subscription *ngIf="viewMode == 'ADD-NEW'" [productId]="selectedProductId" (parentEvent)="onChildEvent($event)"></app-create-subscription>
+    <app-update-subscription *ngIf="viewMode == 'UPDATE'" [productId]="selectedProductId" (parentEvent)="onChildEvent($event)"></app-update-subscription>
+    </section>
+  </div>
+
+</div>

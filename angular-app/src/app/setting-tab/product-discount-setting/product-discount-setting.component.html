@@ -1,0 +1,194 @@
+<div
+  class="d-flex justify-content-center loader"
+  *ngIf="loading"
+>
+  <div
+    class="spinner-border"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<div class="container-fluid card p-0">
+
+  <div class="card-header">
+    <span *ngIf="viewMode == 'LISTING'" class="mat-dislay-1">Discount List</span>
+    <span *ngIf="viewMode == 'ADD-NEW'" class="mat-dislay-1">Create Discount</span>
+    <button
+      *ngIf="viewMode == 'LISTING'"
+      type="button"
+      class="btn btn-link float-right"
+      (click)="viewMode = 'ADD-NEW'"
+    >Add New</button>
+  </div>
+  <div class="card-body">
+
+    <section class="new-discount-form" *ngIf="viewMode == 'ADD-NEW'">
+      <form [formGroup]="newCodeRule">
+        <div class="form-group">
+          <label for="code">Discount Code</label>
+          <input
+            name="code"
+            formControlName="code"
+            type="text"
+            class="form-control"
+            id="code"
+            aria-describedby="emailHelp"
+            placeholder="Enter discount code"
+            maxlength="100"
+          >
+          <mat-error *ngIf="newCodeRule.controls.code.invalid && newCodeRule.controls.code.touched">
+            Enter valid discount code
+          </mat-error>
+        </div>
+        <div class="form-group">
+          <label for="discountValue">Percentage</label>
+          <input
+            formControlName="priceRuleValue"
+            type="text"
+            class="form-control"
+            id="discountValue"
+            placeholder="%"
+          >
+          <mat-error *ngIf="newCodeRule.controls.priceRuleValue.invalid && newCodeRule.controls.priceRuleValue.touched">
+            Enter valid discount value
+          </mat-error>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Select Product</label>
+          <mat-form-field class="w-100">
+            <mat-label>Products</mat-label>
+            <mat-select
+              formControlName="products"
+              multiple
+            >
+              <mat-option
+                *ngFor="let option of productOptions"
+                [value]="option.id"
+              >{{option.title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="newCodeRule.controls.products.invalid && newCodeRule.controls.products.touched">
+            Select minimum one product
+          </mat-error>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-outline-primary"
+          [disabled]="newCodeRule.invalid"
+          (click)="createDiscount()"
+        >Submit</button>
+        <button
+          type="submit"
+          class="btn btn-outline-primary float-right"
+          (click)="viewMode = 'LISTING'"
+        >Cancel</button>
+      </form>
+    </section>
+
+    <section class="list-discount-form" *ngIf="viewMode == 'LISTING'">
+      <div class="row">
+        <div class="col-lg text-center">
+          <form>
+            <div class="row justify-content-md-left">
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Code</label>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Percentage</label>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group">
+                  <label>Select Product</label>
+                </div>
+              </div>
+
+              <div class="col-2">
+                Action
+              </div>
+            </div>
+
+
+            <div
+              class="row justify-content-md-left"
+              *ngFor="let discount of selectionArray; index as i;"
+            >
+              <div class="col-3">
+                <div class="form-group text-left">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    name="line_level_discount_allocations"
+                    placeholder=""
+                    [formControl]="discount.discount.code"
+                  >
+                  <mat-error *ngIf="discount.discount.code.invalid && discount.discount.code.touched">
+                    Enter valid discount code
+                  </mat-error>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group text-left">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="formGroupExampleInput"
+                    placeholder="%"
+                    [formControl]="discount.priceRule.priceRuleValue"
+                  >
+                  <mat-error *ngIf="discount.priceRule.priceRuleValue.invalid && discount.priceRule.priceRuleValue.touched">
+                    Enter valid percentage
+                  </mat-error>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group text-left row">
+                  <mat-form-field>
+                    <mat-label>Products</mat-label>
+                    <mat-select
+                      [formControl]="discount.priceRule.products"
+                      multiple
+                    >
+                      <mat-option
+                        *ngFor="let option of productOptions"
+                        [value]="option.id"
+                      >{{option.title}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="discount.priceRule.products.hasError('required')">
+                    This field is required
+                  </mat-error>
+                </div>
+              </div>
+
+              <div class="col-2">
+                <button
+                  type="submit"
+                  class="btn btn-link p-1"
+                  (click)="updateDescount(i)"
+                >Update</button>/
+                <button
+                  type="submit"
+                  class="btn btn-link p-1"
+                  (click)="deleteDescount(i)"
+                >Delete</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- <div> {{ selectionArray | json }} </div> -->

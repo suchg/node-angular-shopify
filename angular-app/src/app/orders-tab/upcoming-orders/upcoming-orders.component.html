@@ -1,0 +1,57 @@
+<div
+  class="d-flex justify-content-center loader"
+  *ngIf="loading"
+>
+  <div
+    class="spinner-border"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<table mat-table [dataSource]="orders" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="order">
+    <th mat-header-cell *matHeaderCellDef> Original Subscription Id </th>
+    <td mat-cell *matCellDef="let element"> <a [attr.href]="element.order_status_url" target="blank">#{{element.orderId}}</a> </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="product">
+    <th mat-header-cell *matHeaderCellDef> Details </th>
+    <td mat-cell *matCellDef="let element"> {{element.orderTitle}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="raised-by">
+    <th mat-header-cell *matHeaderCellDef> Raised By </th>
+    <td mat-cell *matCellDef="let element"> {{element.raisedBy}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="order-to-place-date">
+    <th mat-header-cell *matHeaderCellDef> Order Will Place On </th>
+    <td mat-cell *matCellDef="let element">{{element.orderToPlaceDate | date}}</td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="total-price">
+    <th mat-header-cell *matHeaderCellDef> Total </th>
+    <td mat-cell *matCellDef="let element"> ${{element.totalPrice}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [length]="length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               [pageIndex]="currentPage"
+               (page)="setPageSizeOptions($event)">
+</mat-paginator>
