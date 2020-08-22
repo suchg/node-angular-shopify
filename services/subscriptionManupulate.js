@@ -70,9 +70,9 @@ const operations = {
             let lastDate = moment().add(duration, 'd');
             let arrDates = [];
             while (currentDate < lastDate) {
-              currentDate.add(frequency, 'd');
               let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
               arrDates.push(date);
+              currentDate.add(frequency, 'd');
             }
             console.log( arrDates );
             resolve(arrDates);
