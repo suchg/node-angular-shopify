@@ -34,12 +34,16 @@ const utility = {
       case 'Monday':
       case 'Tuesday':
       case 'Wednesday':
-      case 'Saturday':
-      case 'Sunday':
         returRecurringStartDate = currentDate.day(5);
       break;
       case 'Thursday':
       case 'Friday':
+        returRecurringStartDate = currentDate.day(12);
+      break;
+      case 'Saturday':
+        returRecurringStartDate = currentDate.day(12);
+      break;
+      case 'Sunday':
         returRecurringStartDate = currentDate.day(12);
       break;
     }

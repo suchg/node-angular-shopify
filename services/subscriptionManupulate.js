@@ -69,10 +69,11 @@ const operations = {
             const duration = response.subscriptionDuration; // duration defined in db in days, assuming 30 dyas a month
             let lastDate = moment().add(duration, 'd');
             let arrDates = [];
+            currentDate.add(frequency, 'd');
             while (currentDate < lastDate) {
-              currentDate.add(frequency, 'd');
               let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
               arrDates.push(date);
+              currentDate.add(frequency, 'd');
             }
             console.log( arrDates );
             resolve(arrDates);
