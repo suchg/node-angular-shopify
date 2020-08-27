@@ -20,6 +20,7 @@ var prerequisiteDao = require('./dao/prerequisite');
 var variantMasterService = require('./services/variantMaster');
 var prerequisiteService = require('./services/prerequisite');
 var subscriptionManupulate = require('./services/subscriptionManupulate');
+var googleSpreadSheetExport = require('./g-spread-sheet-export');
 var authService = require('./services/auth');
 var cron = require('node-cron');
 var moment = require('moment');
@@ -76,6 +77,7 @@ httpsServer.listen(port, () => {
   prerequisiteDao.init();
   // utility.callShopifyCallBack();
   subscriptionManupulate.operations.startCron();
+  googleSpreadSheetExport.startExportCron();
 });
 
 app.use(authService);
