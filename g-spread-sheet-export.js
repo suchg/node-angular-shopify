@@ -2,7 +2,7 @@ const gsr = require('./g-spread-sheet/lib/index')
 const dotenv = require('dotenv').config();
 var cron = require('node-cron');
 const email = 'context@tufsubscribe.iam.gserviceaccount.com';
-const key = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCbnWbLzf7t4TJZ\nhuGRjahj8aNlpLOUofBPSX17o4ONqbZJloOjF1qeTRUpi0KuBieUaOKu+1tGLv4f\nigK1eQGdCbAey5xtCNLR95XzPkxNxTurYuI8VkKskQb5fNGIi80sjwRJLmw7ZQ7O\na3f/eEq1C/s4A3089dS3QGHTFpYu3NOccej5tZ/7H4fhfarkHHP6nmkOLA3GXcJP\n1k3abzCYQz3YKGePMWR+3rz+tWot7VQAsNbew5RNOV4Cn2Cht8UH6TXYqnGRVgoV\ngZU672bWupI5aYZpuBspJT0ya+QYRBBEpFBT9uEog6nhmWxGxpUsfOq3rglW+nl0\nPFRR/bRZAgMBAAECggEAJnWuKogorZeW90/x72SMndjiepRMattkFmByIizNLmWn\nnwPTWGtE8vNXm9smeXadcR1ECx2l1xB1r4tPNJUpzCtRCydk64C/A/Q2K/Y1axIo\nN2k6w1FJbLdyOxZ5fc8ZgB3/n+uYhcxp7qPadjn/csP5jIQ2P2r9beX8V2yRZRa9\njpPlcH2cfoa+jTGHuJdamgOh27vu0zvMkdhIqf4Y3sN/+8W9sQtpCZMKpvwIBAM2\n04jPPe6uDHPJcStr7lhbv+DDyUnKwUDu2h5oamazfWKFTSCWxQXtEIQFM7KKYal5\nKdTX7Z0UNAlcY2eW6eaUVJ6w3araQWRXMqkCK/t3hQKBgQDJ7j/QKdmOif16b2YU\nA1KfjZdJCRXqsw6yCwhKJr1rFTf2DyiJdj8R+p7alLgjMEw7kYiA6vXpirl6rdlw\nZuhY5zulmygvOP4m/DNw8RQr0LGuWjq/L+EwucIISuVt8+29tH5LwLibu3JJrM1A\nbboR2z7VsCepmfBcoNvWMQhATQKBgQDFSFcSo0vUnxxCOluhxBK9Z2Cz6ixw68tD\nd5/kFFCps3MLlDr9wzO3AIYyrhlItnqPov4LcWuGdg1551AU7NGwXNcOqTAmlSaR\nxMd1JY/bhgZRn9hml2ouzh9M4qE03g7UpoVFe9Dh92K54mnduR9hcp1gJkpFrAAB\n+wpnmUDqPQKBgQCim9gJYloOfbKAcMqr3Q0g7R1htA5RJIX1/Apd5Bpu6/RXkldb\ncrxRVxeq/03VEGSjJ4vb/NmwioTYdLz/1e7PAM44itxuQp/vdvJZxdkve2xJ8eES\n6pSV71B/6wgcZe0R8hIuIHDI/8aF68CRXIsVLA/KdoNKAWvcu7CsKGnzlQKBgC/A\nZcsOGZG6fYWOSJWsNvj/Z8nEmcMvX8DR2LLFNA0PcX5Q/8JimEboapMjztzpxlq0\nEhfE+UjPlE14bsrR06ODpU5YJ15/ZZmM7tZtJBf3pdnl/eQ/LCVuIOdkR67bPO29\n7K433QSE87GYmxVe9LiKnIskWX/ptQrFr+wJjUvlAoGADcqvgLAHROcMbMWJ3CxW\nGBTTjdOqVxPBRd3vKNLssU2lvNLuC8RRfTnYCFXxIw22BcfVk0wBMXgZ8w0droHY\nEMKI5O0rxOm2Wb+EJb4In2m5Z+f1fPp4Ji79nvCo01BwiWRUqkCRQmioRkns3vMl\nktj0pZCJNIoG5vENsRVkwL4=\n-----END PRIVATE KEY-----\n";
+const key = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD57rBBuV6hB/65\n0bx2LYvvNqf7QW00ThKFc+60sV8tKbAKt8TD024vuduFM5p/MKjba91wdwWESyhR\nUuIshgySdlh5BpsVdD1n5KSZUaTgJKipildlqpKyjCf7Lg/HHKyjSJVB+XwyJqYv\nFL5L3p01Np2ft2EitqqRsjHVOT1o+jVOkNQSqYxtDHLpIocCmrm7Akgz8uMnJEZF\nLgIAdTSLsP2JKoQslVe2aeoG12VnpOmKFDFHdtdMGJXjPYYTGSUmd0eNDb+nfLul\nHFMqt2rulsPk5M5KYRMkWQ4Mm3XTF/4oxK25R9YmanFVQIPNXzX3QXOa92ttjxhE\nKPWHWIMfAgMBAAECggEAH4JhGZgg1FUUCcyQYacdBOaIx7DC73IxpujWclSzoWz9\nCGI3Xfzc37V4ddLrVRext3ViMINA4HcyjmDQVOP9gnAwd+mbnwPNmLiHATFS2P37\nfuG1t60z22tiFapZS4qo6oOvFZHk1NRx5Rj3Y3dIWI9vJdX9BV8EIrmAINfw5GKk\nkbMLonNe4xNPBlbQ+IF9PeqHqT8V6kSkU5fpSzXi5BCK395HcPbcnInPygL9Y4n7\n+iILPm2wssOZMMxguV2yxehU5The5WUQxCusTQfAzy9uo22+ZwarXu+oaeTTV5z6\nsPVZNmuHKlfOh+JotXhltDmqIqoFEmyDNyR2kO4RSQKBgQD/8MZfnz6fOrem/21m\nEXlr2Lkw3NKEAJKJoPJUkO1wuOwQYc1hhN48bNSmOzTg/zmRX//L2OFPhFjLyyJU\nCNEAHJtV0LoVdm5GkJijlm7Qesx/Zmie4qTRZN7QXPcKxyMDcYoJNKufM5kFzShz\nrwHV34uKJ8cI4duI3vrfPBG/kwKBgQD5/Y5jItaoYLACoZeSGIRjdPXe93ybIpC/\nZE5IHUB/plXJ6YkiJDsCGxAgeAa3o5ZQQoPaxjrA88n0Hec9Y2OU9F0E8wQAWuLT\nsAUMzxRGvu3aW4tCSrttufjHbyLzDYRP6c3U+UspvjVGZtb3x34hX0BjiY38Q5/4\nAgKgJnftxQKBgQDAiMtiYbRFKnG/sgUFNH4IEEf4JxZCcP/LgwTpcwD7vFDxXfGX\nu9FG2YP67S0xWS5gWzxdh/Cu1dvKqyxO1TcMg3ijTNq/jJEWim4ZGfCQ6t/tswdf\nBxZ/4wbu7hB1zipby8zQcgvtPm6N+7DDndKepoUdUCEdYHK6+yr0Rgb/+wKBgDD4\ncHoPCwm01wXM7coar2RkNv3UcT5aiQxU89jAki/vP4LsEobznfONpZ0Wpgo3K2zR\nes7SYhQGLZt6eB/YZlt5evdLO49uPlzFcFfQAOLS5/kMUb1MsmaONaOrq6b9ENwu\nqrl7lDO7JOiDoLytAZI7/HsDKSMvhBirHCSPJJMZAoGAIxeQdUxRA/Y70TOdfPtA\nfohvJcCDyIKsiKO28jCmgEFIT3pwkZPPo6yd4KZQjLsJif5/NKbZ00q5yyg7JMdc\n5Pvhy6/pqvIDWDiI7LlYpnZ12CCNmYgDSVdcpgnE/PCh3IeNZH1CJjEQJtKlgbMY\nWMcMy31uzSbXw2p1XmMFGVc=\n-----END PRIVATE KEY-----\n";
 const spreadsheetId = '1v1RmfuFLxa6uKGRs55hJsymV_4kqK1QiP8oMmpfXY7s';
 // const spreadSheetName = 'orders';
 // const gReadData = require('./g-read-data');
@@ -23,9 +23,9 @@ function getOrders(orderType) {
             try {
                 let orders = JSON.parse(JSON.parse(data).body).orders;
                 if( orderType == 'subscription' ) {
-                    orders = orders.filter( (order) => { order.source_name === 'subscription-app' } );
+                    orders = orders.filter( (order) => order.source_name === 'subscription-app' );
                 } else {
-                    orders = orders.filter( (order) => { order.source_name !== 'subscription-app' } );
+                    orders = orders.filter( (order) => order.source_name !== 'subscription-app' );
                 }
                 let processedOrders = orders.map( (order) => {
                     const customer = order.customer || {};
@@ -118,6 +118,7 @@ function getUcomingOrders() {
     }
 
 function addDataToSpreadSheet(ordersArray, spreadSheetName) {
+    console.log('export started for ' + spreadSheetName);
     const options = {
         email: email,
         key: key,
@@ -178,7 +179,6 @@ const initUpcomingOrdersExport = () => {
 
 const initSubscriptionOrdersExport = () => {
     getOrders('subscription').then( (ordersArray) => {
-        console.log(ordersArray);
         addDataToSpreadSheet(ordersArray, 'subscriptions');
     } );
 };
@@ -189,7 +189,7 @@ const startExportCron = () => {
         initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
     });
-  }
+}
 
 module.exports = {
     startExportCron
