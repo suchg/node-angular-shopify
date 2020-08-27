@@ -1,4 +1,3 @@
-const dayjs = require('dayjs')
 const gsr = require('./g-spread-sheet/lib/index')
 const dotenv = require('dotenv').config();
 var cron = require('node-cron');
