@@ -18,6 +18,7 @@ var productsService = require('./services/product');
 var discountService = require('./services/discount');
 var prerequisiteDao = require('./dao/prerequisite');
 var variantMasterService = require('./services/variantMaster');
+var stripePayment = require('./services/stripe-payment');
 var prerequisiteService = require('./services/prerequisite');
 var subscriptionManupulate = require('./services/subscriptionManupulate');
 var googleSpreadSheetExport = require('./g-spread-sheet-export');
@@ -27,7 +28,7 @@ var moment = require('moment');
 var os = require('os');
 var cluster = require('cluster');
 var utility = require('./services/utility');
-global.appHost = 'unlikely-florist-subscription.herokuapp.com';
+global.appHost = process.env.APP_HOST;
 
 // Count the machine's CPUs
 var cpuCount = require('os').cpus().length;
@@ -69,7 +70,7 @@ var httpsServer = createServer(app);
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api', [ordersService.router, productsService, discountService, variantMasterService]);
+app.use('/api', [ordersService.router, productsService, discountService, variantMasterService, stripePayment]);
 app.use(express.static('./public'));
 
 httpsServer.listen(port, () => {

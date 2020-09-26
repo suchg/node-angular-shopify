@@ -11,7 +11,7 @@ const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET_KEY;
 const port = process.env.PORT;
 const scopes = 'read_products,write_products,read_orders,write_orders,read_customers,read_discounts,write_discounts,read_price_rules,write_price_rules';
-const forwardingAddress = "https://unlikely-florist-subscription.herokuapp.com/"; // Replace this with your HTTPS Forwarding address
+const forwardingAddress = `https://${process.env.APP_HOST}/`; // Replace this with your HTTPS Forwarding address
 const crypto = require('crypto');
 
 router.get('/shopify', (req, res) => {
@@ -24,6 +24,8 @@ router.get('/shopify', (req, res) => {
       '&scope=' + scopes +
       '&state=' + state +
       '&redirect_uri=' + redirectUri;
+      console.log( redirectUri );
+      console.log( installUrl );
     console.log('>>' + shop);
     res.cookie("shopOrigin", shop, { httpOnly: false });
     res.cookie('state', state, { httpOnly: false, secure: true, sameSite: "none" });

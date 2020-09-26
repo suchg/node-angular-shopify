@@ -9,7 +9,8 @@ const spreadsheetId = '1v1RmfuFLxa6uKGRs55hJsymV_4kqK1QiP8oMmpfXY7s';
 var moment = require('moment');
 const request = require('request-promise');
 const { operations } = require('./services/subscriptionManupulate');
-global.applicationHost = 'https://unlikely-florist-subscription.herokuapp.com';
+// global.applicationHost = 'https://unlikely-florist-subscription.herokuapp.com';
+global.applicationHost = 'http://localhost:3000';
 
 function getOrders(orderType) {
     const promise = new Promise( ( resolve, reject ) => {

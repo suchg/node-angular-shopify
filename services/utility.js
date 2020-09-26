@@ -7,6 +7,7 @@ var moment = require('moment');
 
 const utility = {
   callShopifyCallBack : () => {
+    console.log(`https://${global.appHost}/shopify?shop=unlikelyflorist-com.myshopify.com`);
     request.get( `https://${global.appHost}/shopify?shop=unlikelyflorist-com.myshopify.com` )
       .then((data) => {
         console.log('session extended');
@@ -17,6 +18,7 @@ const utility = {
       } );
   },
   callApp : () => {
+    console.log(`https://${global.appHost}`);
     request.get( `https://${global.appHost}` )
       .then((data) => {
         console.log('app session extended');

@@ -9,6 +9,7 @@ var moment = require('moment');
 let productIds = [];
 var cron = require('node-cron');
 var utility = require('./utility');
+var raiseOrdersPollingInProcess = false;
 
 const operations = {
   getMetaFields: (productId, variantId) => {
@@ -64,7 +65,7 @@ const operations = {
         .then((response) => {
           if(response) {
             let currentDate = utility.getRecurringStartDate();
-            console.log( "currentDate: >> "+currentDate.format("YYYY-MM-DD HH:mm:ss").toString() );
+            // console.log( "currentDate: >> "+currentDate.format("YYYY-MM-DD HH:mm:ss").toString() );
             const frequency = response.subscriptionFrequency; // frequency defined in db in days, assuming 7 days a week
             const duration = response.subscriptionDuration; // duration defined in db in days, assuming 30 dyas a month
             let lastDate = moment().add(duration, 'd');
@@ -72,7 +73,7 @@ const operations = {
             while (currentDate < lastDate) {
               let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
               arrDates.push(date);
-              currentDate.add(frequency, 'd');
+              currentDate.add((frequency), 'd');
             }
             console.log( arrDates );
             resolve(arrDates);
@@ -99,8 +100,9 @@ const operations = {
           productIds = products.map((elm) => elm.id);
           productController.productShopify.getSubscriptionMainOrders()
             .then((ordersResponse) => {
-              const objOrdersResponse = JSON.parse(ordersResponse);
-              const orders = objOrdersResponse.orders.filter((order) => {
+              // const objOrdersResponse = JSON.parse(ordersResponse);
+              // const orders = objOrdersResponse.orders.filter((order) => {
+              const orders = ordersResponse[0].filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
@@ -217,49 +219,118 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
+    // console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
+    if( raiseOrdersPollingInProcess == true ) {
+      return;
+    }
+    raiseOrdersPollingInProcess = true;
+
+    
     // let currentDate = moment().subtract(1, 'm');
     // const startDate = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
     // const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
     // const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`;
     const strSelect = `select * from orderstoplace where date(orderToPlaceDate) = CURDATE() and orderPlaced != 1`;
+    // const strSelect = `select * from orderstoplace where orderPlaced != 1`;
     // console.log(strSelect);
-    dbcon.select({ query: strSelect }, function (data) {
-      data.result.forEach((row) => {
-        const orderToPlaceId = row.id;
-        const orderId = row.orderId;
-        const productId = row.productId;
-        if (productId, orderId) {
+
+
+    async function executeOrders (productId, orderId, orderToPlaceId) {
+        let promise = new Promise( (resolve, reject) => {
+          // console.log('step 4');
           productController.productShopify.createNewOrder(productId, orderId)
-            .then((data) => {
-              console.log('order placed ' + orderToPlaceId);
-              productController.productApp.updateOrderPlaced(orderToPlaceId);
-              console.log('order status updated ' + orderToPlaceId);
-            })
-            .catch((error) => {
-              console.error(error.statusCode, error.error.error_description);
-            })
+          .then((data) => {
+            // console.log('step 5 data recieved');
+            console.log('order placed ' + orderToPlaceId);
+            productController.productApp.updateOrderPlaced(orderToPlaceId);
+            console.log('order status updated ' + orderToPlaceId);
+            setTimeout( () => {
+              resolve('order created');
+            }, 61000 );
+          })
+          .catch((error) => {
+            console.error(error);
+            reject(error);
+          })
+        } );
+        return promise;
+    }
+
+
+    async function getRecords (data) {
+      // const files = await getFilePaths();
+    
+      // for (const file of files) {
+      //   const contents = await fs.readFile(file, 'utf8');
+      //   console.log(contents);
+      // }
+      
+        // data.result.forEach((row) => {
+        //   const orderToPlaceId = row.id;
+        //   const orderId = row.orderId;
+        //   const productId = row.productId;
+        //   if (productId, orderId) {
+        //     await executeOrders(productId, orderId);
+        //   }
+        // })
+        // console.log('step 2');
+        // console.log(data.result);
+        for (const row of data.result) {
+          // console.log('step 3 inside for');
+          const orderToPlaceId = row.id;
+          const orderId = row.orderId;
+          const productId = row.productId;
+          if (productId, orderId) {
+            await executeOrders(productId, orderId, orderToPlaceId);
+          }
         }
-      })
-    })
+    }
+
+    dbcon.select({ query: strSelect }, function (data) {
+      // console.log('step 1');
+      getRecords(data).then((data)=> { console.log(data); raiseOrdersPollingInProcess = false; });
+    });
+    
+
+    // dbcon.select({ query: strSelect }, function (data) {
+    //   data.result.forEach((row) => {
+    //     const orderToPlaceId = row.id;
+    //     const orderId = row.orderId;
+    //     const productId = row.productId;
+    //     if (productId, orderId) {
+    //       productController.productShopify.createNewOrder(productId, orderId)
+    //         .then((data) => {
+    //           console.log('order placed ' + orderToPlaceId);
+    //           productController.productApp.updateOrderPlaced(orderToPlaceId);
+    //           console.log('order status updated ' + orderToPlaceId);
+    //         })
+    //         .catch((error) => {
+    //           console.error(error.statusCode, error.error.error_description);
+    //         })
+    //     }
+    //   })
+    // })
   },
   startCron: () => {
-    cron.schedule('0 */1 * * * *', () => {
+    // cron.schedule('0 */1 * * * *', () => {
+    cron.schedule('*/30 * * * * *', () => {
       if( global.shop ) {
         operations.startSubscriptionPolling();
       }
     });
 
-    cron.schedule('0 */1 * * * *', () => {
+    // cron.schedule('0 */1 * * * *', () => {
+    cron.schedule('*/30 * * * * *', () => {
       if( global.shop ) {
         operations.raiseOrdersPolling();
       }
     });
 
-    cron.schedule('0 */25 * * * *', () => {
-      if( global.shop ) {
-        utility.callApp();
-      }
-    });
+    // cron.schedule('0 */25 * * * *', () => {
+    //   if( global.shop ) {
+    //     utility.callApp();
+    //   }
+    // });
 
   }
 }

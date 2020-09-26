@@ -59,7 +59,9 @@ export class ProcessedOrdersComponent {
       .pipe(finalize(() => { this.loading = false; }))
       .subscribe((response: any) => {
         const link = response.headers.link;
-        this.nextUrl = link.replace('<https://unlikelyflorist-com.myshopify.com', '').split('>;')[0].trim();
+        if( link ) {
+          this.nextUrl = link.replace('<https://unlikely-test-strore.myshopify.com', '').split('>;')[0].trim();
+        }
         this.urlStack[this.currentPage + 1] = this.nextUrl;
         // this.manageUrlStack( this.nextUrl );
         const orders = JSON.parse(response.body).orders || [];

@@ -1,5 +1,7 @@
 const service = require('../request')
 var dbcon = require('../../dao/dbcon');
+const { json } = require('body-parser');
+const stripeController = require('./stripeAccountDataController');
 
 const productShopify = {
   getProducts: (req, res) => {
@@ -44,8 +46,17 @@ const productShopify = {
     return service.get(req, res, url);
   },
   getSubscriptionMainOrders: ( req, res, metafieldId ) => {
-    const url = `/admin/api/2020-04/orders.json?financial_status=paid&source_name=web`;
-    return service.get(req, res, url);
+    return new Promise((resolve, reject) => {
+      let url = `/admin/api/2020-04/orders.json?financial_status=paid&source_name=web`;
+      const promise1 = service.get(req, res, url);
+      let url2 = `/admin/api/2020-07/orders.json?financial_status=paid&fulfillment_status=null`;
+      const promise2 = service.get(req, res, url2);
+      Promise.all( [promise1, promise2] ).then((values) => {
+        const val1 = JSON.parse(values[0]);
+        const val2 = JSON.parse(values[1]);
+        resolve([...val1.orders, val2.orders] );
+      });
+    });
   },
   getSubscriptionOrders: ( req, res, metafieldId ) => {
     const url = `/admin/api/2020-04/orders.json?financial_status=paid&source_name=subscription-app`;
@@ -94,15 +105,36 @@ const productShopify = {
               quantity: 1,
               price: 0,
               title: lineItem.title,
-              name: lineItem.name
+              name: lineItem.variant
             }
           ],
-          source_name: 'subscription-app'
+          source_name: 'subscription-app',
+          tags: "buyout-order"
         };
-        // console.log(order);
-        // orderData.source_name = 'subscription-app';
-        $order = service.post(undefined, undefined, url, { order: order });
-        resolve($order);
+
+        if( orderData.source_name == 'recurring' ) {
+          console.log('start recurring payment');
+          const strSelect = `select * from userstripeidmapping where orderId = ${orderId}`;
+          dbcon.select({ query: strSelect }, (data) => {
+            const userRowData = data.result[0];
+            const stripeId = userRowData.stripeId;
+            stripeController.stripeApp.applyCharges(stripeId, orderData.total_price).then( (data) => {
+              // console.log(data);
+              order.line_items[0].price = orderData.total_price;
+              order.tags = "recurring-order";
+              service.post(undefined, undefined, url, { order: order }).then( (data) => {
+                resolve(data);
+              } );
+              
+            } );
+          });
+          
+        } else {
+          // console.log(order);
+          // orderData.source_name = 'subscription-app';
+          $order = service.post(undefined, undefined, url, { order: order });
+          resolve($order);
+        }
       });
     });
   },
@@ -133,7 +165,7 @@ const productApp = {
   },
   updateOrderPlaced: ( orderToPlaceId ) => {
     const strUpdate = `update orderstoplace set orderPlaced = 1 where id = ${orderToPlaceId}`;
-    dbcon.select({ query: strUpdate }, (result) => {
+    dbcon.update({ query: strUpdate }, (result) => {
       console.log(`Updated orders to place ${orderToPlaceId}`);
     });
   },
