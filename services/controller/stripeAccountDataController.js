@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const service = require('../request')
 var dbcon = require('../../dao/dbcon');
 const stripe = require('stripe');
