@@ -2,7 +2,10 @@ const dotenv = require('dotenv').config();
 const service = require('../request')
 var dbcon = require('../../dao/dbcon');
 const stripe = require('stripe');
-const objStripe = stripe(Buffer.from(process.env.p2).toString('base64'));
+let data = process.env.p2;
+let buff = new Buffer(data, 'base64');
+let text = buff.toString('ascii');
+const objStripe = stripe(text);
 
 const stripeShopify = {
   getProducts: (req, res) => {

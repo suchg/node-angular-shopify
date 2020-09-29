@@ -8,8 +8,10 @@ const discountDao = require('../dao/discount');
 const stripeController = require('./controller/stripeAccountDataController');
 const emailValidator = require('email-validator');
 // const objStripe = stripe('sk_test_51HMZpfDHfdOEoLBnnjqVmGVi2MTwS7lrjL1d0nreWqWFVSU1PJ6NSc7Bv4S0IkgZ445EY5GLJ6n0saQ8uiJjTds900AmNJ8sXy');
-console.log(Buffer.from(process.env.p2).toString('base64'));
-const objStripe = stripe(Buffer.from(process.env.p2).toString('base64'));
+let data = process.env.p2;
+let buff = new Buffer(data, 'base64');
+let text = buff.toString('ascii');
+const objStripe = stripe(text);
 var objFUnction = {
   createCustomer: ( customerEmail ) => {
     // console.log( 'customerEmail' + customerEmail );
