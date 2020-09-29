@@ -37,7 +37,7 @@ router.get('/shopify', (req, res) => {
 
 router.get('/shopify/callback', (req, res) => {
   const { shop, hmac, code, state } = req.query;
-  console.log(req.headers.cookie);
+  console.log(req.headers);
   const stateCookie = cookie.parse(req.headers.cookie).state;
   global.shop = shop;
   console.log('>>' + shop);
