@@ -38,13 +38,13 @@ router.get('/shopify', (req, res) => {
 router.get('/shopify/callback', (req, res) => {
   const { shop, hmac, code, state } = req.query;
   console.log(req.headers);
-  const stateCookie = cookie.parse(req.headers.cookie).state;
+  // const stateCookie = cookie.parse(req.headers.cookie).state;
   global.shop = shop;
   console.log('>>' + shop);
   res.cookie("shopOrigin", shop, { httpOnly: false });
-  if (state !== stateCookie) {
-    return res.status(403).send('Request origin cannot be verified');
-  }
+  // if (state !== stateCookie) {
+  //   return res.status(403).send('Request origin cannot be verified');
+  // }
 
   if (shop && hmac && code) {
     // DONE: Validate request is from Shopify
