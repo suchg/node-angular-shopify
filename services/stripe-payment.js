@@ -7,7 +7,7 @@ const discountDao = require('../dao/discount');
 const stripeController = require('./controller/stripeAccountDataController');
 const emailValidator = require('email-validator');
 // const objStripe = stripe('sk_test_51HMZpfDHfdOEoLBnnjqVmGVi2MTwS7lrjL1d0nreWqWFVSU1PJ6NSc7Bv4S0IkgZ445EY5GLJ6n0saQ8uiJjTds900AmNJ8sXy');
-const objStripe = stripe(process.env.STRIPE_SECRET_KEY);
+const objStripe = stripe(atob(process.env.p2));
 var objFUnction = {
   createCustomer: ( customerEmail ) => {
     // console.log( 'customerEmail' + customerEmail );

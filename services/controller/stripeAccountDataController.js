@@ -1,7 +1,7 @@
 const service = require('../request')
 var dbcon = require('../../dao/dbcon');
 const stripe = require('stripe');
-const objStripe = stripe(process.env.STRIPE_SECRET_KEY);
+const objStripe = stripe(atob(process.env.p2));
 
 const stripeShopify = {
   getProducts: (req, res) => {
