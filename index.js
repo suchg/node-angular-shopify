@@ -5,6 +5,7 @@ var cors = require('cors');
 const app = express();
 const crypto = require('crypto');
 const cookie = require('cookie');
+var cookieParser = require('cookie-parser')
 
 const querystring = require('querystring');
 const request = require('request-promise');
@@ -67,6 +68,7 @@ var httpsServer = createServer(app);
 //   } )
 // });
 
+app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
