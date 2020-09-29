@@ -77,8 +77,8 @@ httpsServer.listen(port, () => {
   console.log('Subscription app is listening on port' + port);
   prerequisiteDao.init();
   // utility.callShopifyCallBack();
-  subscriptionManupulate.operations.startCron();
-  googleSpreadSheetExport.startExportCron();
+  // subscriptionManupulate.operations.startCron();
+  // googleSpreadSheetExport.startExportCron();
 });
 
 app.use(authService);
