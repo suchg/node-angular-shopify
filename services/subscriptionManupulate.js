@@ -102,6 +102,9 @@ const operations = {
             .then((ordersResponse) => {
               // const objOrdersResponse = JSON.parse(ordersResponse);
               // const orders = objOrdersResponse.orders.filter((order) => {
+                console.log('>>>>>>>>>>>>>>>>>>>');
+                console.log(ordersResponse);
+                console.log('>>>>>>>>>>>>>>>>>>>');
               const orders = ordersResponse[0].filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;

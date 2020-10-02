@@ -52,8 +52,6 @@ const productShopify = {
       let url2 = `/admin/api/2020-07/orders.json?financial_status=paid&fulfillment_status=null`;
       const promise2 = service.get(req, res, url2);
       Promise.all( [promise1, promise2] ).then((values) => {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-        console.log(values);
         const val1 = JSON.parse(values[0]);
         const val2 = JSON.parse(values[1]);
         resolve([...val1.orders, val2.orders] );
