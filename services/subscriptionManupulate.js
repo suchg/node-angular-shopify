@@ -98,7 +98,7 @@ const operations = {
           const objProductsResponse = JSON.parse(productsResponse);
           const products = objProductsResponse.products;
           productIds = products.map((elm) => elm.id);
-          console.log( 'productIds:' + productIds );
+          // console.log( 'productIds:' + productIds );
           productController.productShopify.getSubscriptionMainOrders()
             .then((ordersResponse) => {
               // const objOrdersResponse = JSON.parse(ordersResponse);
