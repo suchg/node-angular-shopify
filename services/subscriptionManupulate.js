@@ -102,10 +102,10 @@ const operations = {
             .then((ordersResponse) => {
               // const objOrdersResponse = JSON.parse(ordersResponse);
               // const orders = objOrdersResponse.orders.filter((order) => {
-                console.log('>>>>>>>>>>>>>>>>>>>');
-                console.log(ordersResponse);
-                console.log('>>>>>>>>>>>>>>>>>>>');
-              const orders = ordersResponse[0].filter((order) => {
+                // console.log('>>>>>>>>>>>>>>>>>>>');
+                // console.log(ordersResponse[0]);
+                // console.log('>>>>>>>>>>>>>>>>>>>');
+              const orders = ordersResponse.filter((order) => {
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
