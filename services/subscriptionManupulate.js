@@ -103,17 +103,17 @@ const operations = {
             .then((ordersResponse) => {
               // const objOrdersResponse = JSON.parse(ordersResponse);
               // const orders = objOrdersResponse.orders.filter((order) => {
-                console.log('>>>>>>>>>>>>>>>>>>>');
-                console.log(ordersResponse.length);
-                console.log('>>>>>>>>>>>>>>>>>>>');
+                // console.log('>>>>>>>>>>>>>>>>>>>');
+                // console.log(ordersResponse.length);
+                // console.log('>>>>>>>>>>>>>>>>>>>');
               const orders = ordersResponse.filter((order) => {
-                console.log('>>>>>>>>> order id: ' + order.id, order.tags);
+                // console.log('>>>>>>>>> order id: ' + order.id, order.tags);
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
                   lineItems.forEach((lineItem) => {
                     const productId = lineItem.product_id;
-                    console.log('>>>>>>>>> productId id', productId);
+                    // console.log('>>>>>>>>> productId id', productId);
                     if (productIds.indexOf(productId) != -1 && lineItem.sku == 'subscription-app-sku') {
                       isSubscpriptionOrder = true;
                     }
