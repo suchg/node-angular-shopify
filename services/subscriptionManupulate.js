@@ -98,6 +98,7 @@ const operations = {
           const objProductsResponse = JSON.parse(productsResponse);
           const products = objProductsResponse.products;
           productIds = products.map((elm) => elm.id);
+          console.log( 'productIds:' + productIds );
           productController.productShopify.getSubscriptionMainOrders()
             .then((ordersResponse) => {
               // const objOrdersResponse = JSON.parse(ordersResponse);
@@ -106,11 +107,13 @@ const operations = {
                 // console.log(ordersResponse[0]);
                 // console.log('>>>>>>>>>>>>>>>>>>>');
               const orders = ordersResponse.filter((order) => {
+                console.log('>>>>>>>>> order id', order.id);
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
                   lineItems.forEach((lineItem) => {
                     const productId = lineItem.product_id;
+                    console.log('>>>>>>>>> productId id', productId);
                     if (productIds.indexOf(productId) != -1 && lineItem.sku == 'subscription-app-sku') {
                       isSubscpriptionOrder = true;
                     }
