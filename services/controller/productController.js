@@ -54,7 +54,7 @@ const productShopify = {
       Promise.all( [promise1, promise2] ).then((values) => {
         const val1 = JSON.parse(values[0]);
         const val2 = JSON.parse(values[1]);
-        resolve([...val1.orders, val2.orders] );
+        resolve([...val1.orders, ...val2.orders] );
       });
     });
   },
