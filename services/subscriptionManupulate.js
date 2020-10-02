@@ -103,11 +103,11 @@ const operations = {
             .then((ordersResponse) => {
               // const objOrdersResponse = JSON.parse(ordersResponse);
               // const orders = objOrdersResponse.orders.filter((order) => {
-                // console.log('>>>>>>>>>>>>>>>>>>>');
-                // console.log(ordersResponse[0]);
-                // console.log('>>>>>>>>>>>>>>>>>>>');
+                console.log('>>>>>>>>>>>>>>>>>>>');
+                console.log(ordersResponse.length);
+                console.log('>>>>>>>>>>>>>>>>>>>');
               const orders = ordersResponse.filter((order) => {
-                console.log('>>>>>>>>> order id', order.id);
+                console.log('>>>>>>>>> order id: ' + order.id, order.tags);
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
