@@ -119,9 +119,9 @@ const productShopify = {
           dbcon.select({ query: strSelect }, (data) => {
             const userRowData = data.result[0];
             const stripeId = userRowData.stripeId;
-            stripeController.stripeApp.applyCharges(stripeId, orderData.total_price).then( (data) => {
+            stripeController.stripeApp.applyCharges(stripeId, orderData.total_line_items_price).then( (data) => {
               // console.log(data);
-              order.line_items[0].price = orderData.total_price;
+              order.line_items[0].price = orderData.total_line_items_price;
               order.tags = "recurring-order";
               service.post(undefined, undefined, url, { order: order }).then( (data) => {
                 resolve(data);

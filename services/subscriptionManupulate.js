@@ -10,6 +10,7 @@ let productIds = [];
 var cron = require('node-cron');
 var utility = require('./utility');
 var raiseOrdersPollingInProcess = false;
+var raiseOrdersPollingCallingCounter = 0;
 
 const operations = {
   getMetaFields: (productId, variantId) => {
@@ -228,11 +229,18 @@ const operations = {
   },
   raiseOrdersPolling: () => {
     console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
+    raiseOrdersPollingCallingCounter ++;
+
+    if( raiseOrdersPollingCallingCounter > 60 ) {
+      raiseOrdersPollingInProcess == false;
+    }
+
     if( raiseOrdersPollingInProcess == true ) {
       return;
     }
-    raiseOrdersPollingInProcess = true;
 
+    raiseOrdersPollingInProcess = true;
+    raiseOrdersPollingCallingCounter = 0;
     
     // let currentDate = moment().subtract(1, 'm');
     // const startDate = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
