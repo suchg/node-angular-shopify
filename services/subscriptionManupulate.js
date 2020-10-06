@@ -239,7 +239,6 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
-    return true;
     console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
     raiseOrdersPollingCallingCounter ++;
 
