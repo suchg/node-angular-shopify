@@ -79,12 +79,12 @@ const stripeApp = {
         });
         // console.log(paymentMethods);
         const paymentMethod = paymentMethods.data[0];
-        console.log("price:" + price);
-        // console.log(Number(price)*100);
+        // console.log("price:" + price);
+        console.log(Number(price)*100);
         try {
           console.log('apply payment >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>' + Number(price)*100);
           const paymentIntent = await objStripe.paymentIntents.create({
-            amount: Number(price),
+            amount: Number(price)*100,
             currency: 'usd',
             customer: customerStripeId,
             payment_method: paymentMethod.id,
