@@ -211,7 +211,7 @@ router.post('/placeSubscriptionOrder', (req, res) => {
             "code": "unlikely-standard",
             "price": `${shippingPrice}`,
             "source": "unlikely_post",
-            "title": "Unlikely flowrist shipping service",
+            "title": "Subscriber Shipping",
             "tax_lines": [],
             "carrier_identifier": "third_party_carrier_identifier",
             "requested_fulfillment_service_id": "third_party_fulfillment_service_id"

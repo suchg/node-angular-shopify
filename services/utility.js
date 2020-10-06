@@ -50,6 +50,29 @@ const utility = {
       break;
     }
     return returRecurringStartDate;
+  },
+  getRecurringStartDateDiffDays: () => {
+    let currentDate = moment();
+    let dayName = currentDate.format('dddd');
+    let days = 0;
+    switch (dayName) {
+      case 'Monday':
+      case 'Tuesday':
+      case 'Wednesday':
+        days = 5;
+      break;
+      case 'Thursday':
+      case 'Friday':
+        days = 12;
+      break;
+      case 'Saturday':
+        days = 12;
+      break;
+      case 'Sunday':
+        days = 12;
+      break;
+    }
+    return days;
   }
 }
 
