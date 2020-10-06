@@ -70,7 +70,7 @@ const operations = {
             const frequency = response.subscriptionFrequency; // frequency defined in db in days, assuming 7 days a week
             const duration = response.subscriptionDuration; // duration defined in db in days, assuming 30 dyas a month
             let daysDiff = utility.getRecurringStartDateDiffDays();
-            let lastDate = moment().add((duration - (frequency - daysDiff )), 'd');
+            let lastDate = moment().add((duration - (frequency - (daysDiff - 1) )), 'd');
             let arrDates = [];
             let loopCounter = 0;
             console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
