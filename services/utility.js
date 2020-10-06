@@ -57,19 +57,22 @@ const utility = {
     let days = 0;
     switch (dayName) {
       case 'Monday':
+        days = 4;
       case 'Tuesday':
+        days = 3;
       case 'Wednesday':
-        days = 5;
+        days = 2;
       break;
       case 'Thursday':
+        days = 1;
       case 'Friday':
-        days = 12;
+        days = 0;
       break;
       case 'Saturday':
-        days = 12;
+        days = 6;
       break;
       case 'Sunday':
-        days = 12;
+        days = 5;
       break;
     }
     return days;
