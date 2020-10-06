@@ -110,8 +110,14 @@ const operations = {
                 // console.log('>>>>>>>>>>>>>>>>>>>');
                 // console.log(ordersResponse.length);
                 // console.log('>>>>>>>>>>>>>>>>>>>');
+              const uniqueOrderIds = [];
               const orders = ordersResponse.filter((order) => {
                 // console.log('>>>>>>>>> order id: ' + order.id, order.tags);
+                if( uniqueOrderIds.indexOf(order.id) != -1 ) {
+                  return false;
+                }
+                uniqueOrderIds.push(order.id);
+                
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
@@ -229,6 +235,7 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
+    return true;
     console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
     raiseOrdersPollingCallingCounter ++;
 
@@ -306,13 +313,15 @@ const operations = {
     dbcon.select({ query: strSelect }, function (data) {
       console.log('step 1');
       try {
-        console.log(data.result);
-        console.log(data.result.length);
+        if( data && data.result.length > 0 ) {
+          getRecords(data).then((data)=> { console.log(data); raiseOrdersPollingInProcess = false; });
+        } else {
+          raiseOrdersPollingInProcess = false;
+        }
       } catch (error) {
         
       }
       
-      getRecords(data).then((data)=> { console.log(data); raiseOrdersPollingInProcess = false; });
     });
     
 
