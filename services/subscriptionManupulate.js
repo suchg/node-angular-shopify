@@ -117,7 +117,7 @@ const operations = {
                   return false;
                 }
                 uniqueOrderIds.push(order.id);
-                
+
                 const lineItems = order.line_items || [];
                 let isSubscpriptionOrder = false;
                 if (order.source_name != 'subscription-app') {
@@ -235,7 +235,6 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
-    return true;
     console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
     raiseOrdersPollingCallingCounter ++;
 
@@ -319,7 +318,7 @@ const operations = {
           raiseOrdersPollingInProcess = false;
         }
       } catch (error) {
-        
+        raiseOrdersPollingInProcess = false;
       }
       
     });
