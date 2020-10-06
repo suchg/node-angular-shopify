@@ -235,6 +235,7 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
+    return true;
     console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
     raiseOrdersPollingCallingCounter ++;
 
@@ -310,9 +311,9 @@ const operations = {
     }
 
     dbcon.select({ query: strSelect }, function (data) {
-      console.log('step 1');
       try {
         if( data && data.result.length > 0 ) {
+          console.log('step 1');
           getRecords(data).then((data)=> { console.log(data); raiseOrdersPollingInProcess = false; });
         } else {
           raiseOrdersPollingInProcess = false;
