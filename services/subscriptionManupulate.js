@@ -68,8 +68,10 @@ const operations = {
             // console.log( "currentDate: >> "+currentDate.format("YYYY-MM-DD HH:mm:ss").toString() );
             const frequency = response.subscriptionFrequency; // frequency defined in db in days, assuming 7 days a week
             const duration = response.subscriptionDuration; // duration defined in db in days, assuming 30 dyas a month
-            let lastDate = moment().add(duration, 'd');
+            let lastDate = moment().add((duration - frequency), 'd');
             let arrDates = [];
+            let loopCounter = 0;
+            
             while (currentDate < lastDate) {
               let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
               arrDates.push(date);
@@ -225,7 +227,7 @@ const operations = {
       });
   },
   raiseOrdersPolling: () => {
-    // console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
+    console.log('raiseOrdersPolling', raiseOrdersPollingInProcess);
     if( raiseOrdersPollingInProcess == true ) {
       return;
     }
@@ -293,7 +295,7 @@ const operations = {
     }
 
     dbcon.select({ query: strSelect }, function (data) {
-      // console.log('step 1');
+      console.log('step 1');
       getRecords(data).then((data)=> { console.log(data); raiseOrdersPollingInProcess = false; });
     });
     

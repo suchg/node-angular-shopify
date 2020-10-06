@@ -3,7 +3,7 @@ const service = require('../request')
 var dbcon = require('../../dao/dbcon');
 const stripe = require('stripe');
 let data = process.env.p2;
-let buff = new Buffer(data, 'base64');
+let buff = Buffer.from(data, 'base64');
 let text = buff.toString('ascii');
 const objStripe = stripe(text);
 
@@ -79,13 +79,13 @@ const stripeApp = {
         });
         // console.log(paymentMethods);
         const paymentMethod = paymentMethods.data[0];
-        // console.log(price);
-        console.log(Number(price)*100);
+        console.log("price:" + price);
+        // console.log(Number(price)*100);
         try {
           console.log('apply payment >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>' + Number(price)*100);
           const paymentIntent = await objStripe.paymentIntents.create({
-            amount: Number(price)*100,
-            currency: 'inr',
+            amount: Number(price),
+            currency: 'usd',
             customer: customerStripeId,
             payment_method: paymentMethod.id,
             off_session: true,

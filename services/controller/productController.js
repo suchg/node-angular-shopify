@@ -109,7 +109,8 @@ const productShopify = {
             }
           ],
           source_name: 'subscription-app',
-          tags: "buyout-order"
+          tags: "buyout-order",
+          shipping_lines: orderData.shipping_lines
         };
 
         if( orderData.source_name == 'recurring' ) {

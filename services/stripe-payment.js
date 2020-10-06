@@ -9,7 +9,7 @@ const stripeController = require('./controller/stripeAccountDataController');
 const emailValidator = require('email-validator');
 // const objStripe = stripe('sk_test_51HMZpfDHfdOEoLBnnjqVmGVi2MTwS7lrjL1d0nreWqWFVSU1PJ6NSc7Bv4S0IkgZ445EY5GLJ6n0saQ8uiJjTds900AmNJ8sXy');
 let data = process.env.p2;
-let buff = new Buffer(data, 'base64');
+let buff = Buffer.from(data, 'base64');
 let text = buff.toString('ascii');
 const objStripe = stripe(text);
 var objFUnction = {
@@ -185,6 +185,11 @@ router.post('/placeSubscriptionOrder', (req, res) => {
     });
     
     // console.log(objProperties);
+    let shippingPrice = 0.00;
+    if( orderData.shippingType == "Ship") {
+      shippingPrice = 10.00;
+    }
+
     let order= {
         "email": orderData.email,
         "fulfillment_status": null,
@@ -197,7 +202,19 @@ router.post('/placeSubscriptionOrder', (req, res) => {
           {
             "variant_id": lineItem.variant_id,
             "quantity": 1,
-            "properties": arrProperties
+            "properties": arrProperties,
+            "requires_shipping": true
+          }
+        ],
+        "shipping_lines": [
+          {
+            "code": "unlikely-standard",
+            "price": `${shippingPrice}`,
+            "source": "unlikely_post",
+            "title": "Unlikely flowrist shipping service",
+            "tax_lines": [],
+            "carrier_identifier": "third_party_carrier_identifier",
+            "requested_fulfillment_service_id": "third_party_fulfillment_service_id"
           }
         ],
         "source_name": 'recurring',
