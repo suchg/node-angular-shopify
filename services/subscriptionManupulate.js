@@ -73,7 +73,9 @@ const operations = {
             let lastDate = moment().add((duration - (frequency - daysDiff )), 'd');
             let arrDates = [];
             let loopCounter = 0;
-            
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
+            console.log( [duration, frequency, daysDiff] );
+            console.log(currentDate, lastDate);
             while (currentDate < lastDate) {
               let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
               arrDates.push(date);
