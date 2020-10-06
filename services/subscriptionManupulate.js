@@ -305,6 +305,13 @@ const operations = {
 
     dbcon.select({ query: strSelect }, function (data) {
       console.log('step 1');
+      try {
+        console.log(data.result);
+        console.log(data.result.length);
+      } catch (error) {
+        
+      }
+      
       getRecords(data).then((data)=> { console.log(data); raiseOrdersPollingInProcess = false; });
     });
     
