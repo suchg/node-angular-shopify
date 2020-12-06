@@ -143,4 +143,10 @@ export class ServiceService {
     return this.http.get(url);
   }
 
+  fetchPaymentDeatils(orderIds) {
+    let strIds = orderIds.join(', ');
+    const url = `../api/paymentDeatils?orderIds=${strIds}`;
+    return this.http.get(url);
+  }
+
 }

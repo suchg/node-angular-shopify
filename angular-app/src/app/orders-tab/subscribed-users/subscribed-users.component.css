@@ -1,0 +1,91 @@
+table{
+    width: 100%;
+   }
+   
+   .mat-column-order {
+     word-wrap: break-word !important;
+     white-space: unset !important;
+     flex: 0 0 15% !important;
+     width: 15% !important;
+     overflow-wrap: break-word;
+     word-wrap: break-word;
+   
+     word-break: break-word;
+   
+     -ms-hyphens: auto;
+     -moz-hyphens: auto;
+     -webkit-hyphens: auto;
+     hyphens: auto;
+   }
+   
+   .mat-column-raised-by {
+     word-wrap: break-word !important;
+     white-space: unset !important;
+     flex: 0 0 25% !important;
+     width: 25% !important;
+     overflow-wrap: break-word;
+     word-wrap: break-word;
+   
+     word-break: break-word;
+   
+     -ms-hyphens: auto;
+     -moz-hyphens: auto;
+     -webkit-hyphens: auto;
+     hyphens: auto;
+   }
+   
+   .mat-column-product {
+     word-wrap: break-word !important;
+     white-space: unset !important;
+     flex: 0 0 17% !important;
+     width: 17% !important;
+     overflow-wrap: break-word;
+     word-wrap: break-word;
+   
+     word-break: break-word;
+   
+     -ms-hyphens: auto;
+     -moz-hyphens: auto;
+     -webkit-hyphens: auto;
+     hyphens: auto;
+   }
+   
+   .mat-column-order-to-place-date {
+     word-wrap: break-word !important;
+     white-space: unset !important;
+     flex: 0 0 15% !important;
+     width: 15% !important;
+     overflow-wrap: break-word;
+     word-wrap: break-word;
+   
+     word-break: break-word;
+   
+     -ms-hyphens: auto;
+     -moz-hyphens: auto;
+     -webkit-hyphens: auto;
+     hyphens: auto;
+   }
+  
+   .mat-column-total-price {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 8% !important;
+    width: 8% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  
+  .filter-by-label, .filter-by-user{
+    display: inline-block;
+    vertical-align: inherit;
+  }
+  
+  .filter-by-user{ padding-left: 20px; height: 44px; overflow: hidden; }
+   

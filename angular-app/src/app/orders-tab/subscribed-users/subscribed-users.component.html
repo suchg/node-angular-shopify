@@ -1,0 +1,48 @@
+<div
+  class="d-flex justify-content-center loader"
+  *ngIf="loading"
+>
+  <div
+    class="spinner-border"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<table mat-table [dataSource]="orders" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="user">
+    <th mat-header-cell *matHeaderCellDef> User </th>
+    <td mat-cell *matCellDef="let element"> {{element.user}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="orderTitle">
+    <th mat-header-cell *matHeaderCellDef> Order details </th>
+    <td mat-cell *matCellDef="let element"> {{element.orderTitle}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="subscriptionStatus">
+    <th mat-header-cell *matHeaderCellDef> Subscription status </th>
+    <td mat-cell *matCellDef="let element">
+        <!-- {{element.subscriptionStatus}} -->
+        <button mat-raised-button *ngIf="element.subscriptionStatus === 1" class="active" (click)="updateSubscriptionStatus(element)">Active</button>
+        <button mat-raised-button *ngIf="element.subscriptionStatus === 0" class="inactive" (click)="updateSubscriptionStatus(element)">Inactive</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<!-- <mat-paginator [length]="length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               [pageIndex]="currentPage"
+               (page)="setPageSizeOptions($event)">
+</mat-paginator> -->

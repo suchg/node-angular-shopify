@@ -30,7 +30,7 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./processed-orders.component.css']
 })
 export class ProcessedOrdersComponent {
-  displayedColumns: string[] = ['id', 'created_at', 'subtotal_price',
+  displayedColumns: string[] = ['id', 'payment_url', 'created_at', 'subtotal_price',
                                 'customer', 'financial_status', 'title',
                                 'payment_gateway_names'];
   // dataSource = ELEMENT_DATA;
@@ -65,7 +65,9 @@ export class ProcessedOrdersComponent {
         this.urlStack[this.currentPage + 1] = this.nextUrl;
         // this.manageUrlStack( this.nextUrl );
         const orders = JSON.parse(response.body).orders || [];
+        let arrIds = [];
         this.orders = orders.map((item) => {
+          arrIds.push(item.id); 
           return {
             id: item.id,
             created_at: item.created_at,
@@ -76,6 +78,15 @@ export class ProcessedOrdersComponent {
             payment_gateway_names: item.payment_gateway_names,
             order_status_url: item.order_status_url
           };
+        });
+        this.service.fetchPaymentDeatils(arrIds).subscribe((data: any)=>{
+          this.orders.forEach((item) => {
+            data.result.forEach(element => {
+              if( element.orderId == item.id ) {
+                item['payment_url'] = 'https://dashboard.stripe.com/test/payments/' + element.stripePaymentId
+              }
+            });
+          } );
         });
       });
   }

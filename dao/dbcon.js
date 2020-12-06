@@ -14,11 +14,11 @@ const dbcon = {
     // } else {
     //   console.log('No connectoin!');
     // }
-
     pool.getConnection( ( err, connection ) => {
       connection.query( data.query, data.data, (err, result) => {
           if( err ) { throw err }
           connection.release();
+          connection.destroy();
           onCallBack({ result });
       } )
     } )

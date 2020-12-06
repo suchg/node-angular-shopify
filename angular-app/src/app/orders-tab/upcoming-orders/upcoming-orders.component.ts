@@ -19,7 +19,12 @@ export class UpcomingOrdersComponent implements OnInit {
   // MatPaginator Output
   pageEvent: PageEvent;
   loading = false;
-  constructor( private orderService: OrdersService ) { }
+  subscribedUsers = [];
+  selectedUserFilter = '';
+
+  constructor( private orderService: OrdersService ) {
+    this.fetchSubscribedUsers();
+  }
 
   ngOnInit() {
     this.fetchUpcomingOrders();
@@ -28,7 +33,7 @@ export class UpcomingOrdersComponent implements OnInit {
   fetchUpcomingOrders() {
     this.loading = true;
     const from = this.currentPage * this.pageSize;
-    this.orderService.fetchUpcomingOrders( from, this.pageSize )
+    this.orderService.fetchUpcomingOrders( from, this.pageSize, this.selectedUserFilter )
     .pipe( finalize( () => { this.loading = false; } ) )
     .subscribe( (response: any) => {
       const rows = response.upcomingOrders.result;
@@ -52,6 +57,18 @@ export class UpcomingOrdersComponent implements OnInit {
     } );
   }
 
+  fetchSubscribedUsers() {
+    this.orderService.fetchSubscription().subscribe( (data: any) => {
+      var tempArr = [];
+      data.result.forEach(element => {
+        if( !tempArr.includes(element.userEmail) ) {
+          this.subscribedUsers.push( {value: element.userEmail, viewValue: element.userEmail} )  
+        }
+        tempArr.push(element.userEmail);
+      });
+    } );
+  }
+
   setPageSizeOptions(setPageSizeOptionsInput: any) {
     if (setPageSizeOptionsInput) {
       if ( this.pageSize !== setPageSizeOptionsInput.pageSize ) {
@@ -62,6 +79,11 @@ export class UpcomingOrdersComponent implements OnInit {
       this.pageSize = setPageSizeOptionsInput.pageSize;
       this.fetchUpcomingOrders();
     }
+  }
+
+  onChangeUserFilter(value) {
+    this.selectedUserFilter = value;
+    this.fetchUpcomingOrders();
   }
 
 }

@@ -75,13 +75,13 @@ const operations = {
             lastDate = lastDate.add((duration - frequency), 'd');
             let arrDates = [];
             let loopCounter = 0;
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
-            console.log( [duration, frequency, daysDiff] );
-            console.log(currentDate, lastDate);
+            // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
+            // console.log( [duration, frequency, daysDiff] );
+            // console.log(currentDate, lastDate);
             while (currentDate <= lastDate) {
-              let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
-              arrDates.push(date);
-              currentDate.add((frequency), 'd');
+                let date = currentDate.format("YYYY-MM-DD HH:mm:ss").toString();
+                arrDates.push(date);
+                currentDate.add((frequency), 'd');
             }
             console.log( arrDates );
             resolve(arrDates);
@@ -258,7 +258,10 @@ const operations = {
     // const endDate = currentDate.add(1, 'm').format("YYYY-MM-DD HH:mm:ss").toString();
     // const strSelect = `select * from orderstoplace where orderToPlaceDate >= ${dbcon.connection.escape(startDate)} and orderToPlaceDate <= ${dbcon.connection.escape(endDate)} and orderPlaced != 1`;
     // const strSelect = `select * from orderstoplace where date(orderToPlaceDate) = CURDATE() and orderPlaced != 1`;
-    const strSelect = `select * from orderstoplace where orderPlaced != 1`;
+    // const strSelect = `select * from orderstoplace where orderPlaced != 1`;
+
+    const strSelect = `select t1.* from orderstoplace as t1 join subscription as t2 WHERE t1.orderId = t2.orderId 
+                      and t1.orderPlaced != 1 and t2.subscriptionActive = 1 and date(t1.orderToPlaceDate) = CURDATE()`;
     // console.log(strSelect);
 
 
@@ -349,14 +352,14 @@ const operations = {
   },
   startCron: () => {
     // cron.schedule('0 */1 * * * *', () => {
-    cron.schedule('*/30 * * * * *', () => {
+    cron.schedule('* */1 * * * *', () => {
       if( global.shop ) {
         operations.startSubscriptionPolling();
       }
     });
 
     // cron.schedule('0 */1 * * * *', () => {
-    cron.schedule('*/30 * * * * *', () => {
+    cron.schedule('* */1 * * * *', () => {
       if( global.shop ) {
         operations.raiseOrdersPolling();
       }

@@ -6,6 +6,7 @@ let data = process.env.p2;
 let buff = Buffer.from(data, 'base64');
 let text = buff.toString('ascii');
 const objStripe = stripe(text);
+// const objStripe = stripe('sk_test_51HMZpfDHfdOEoLBnnjqVmGVi2MTwS7lrjL1d0nreWqWFVSU1PJ6NSc7Bv4S0IkgZ445EY5GLJ6n0saQ8uiJjTds900AmNJ8sXy');
 
 const stripeShopify = {
   getProducts: (req, res) => {
@@ -93,7 +94,7 @@ const stripeApp = {
           });
           // console.log(paymentIntent.status);
           if( paymentIntent.status == "succeeded" ) {
-            resolve('succeeded');
+            resolve(paymentIntent);
           } else {
             reject('failed');
           }

@@ -119,15 +119,22 @@ const productShopify = {
           dbcon.select({ query: strSelect }, (data) => {
             const userRowData = data.result[0];
             const stripeId = userRowData.stripeId;
-            stripeController.stripeApp.applyCharges(stripeId, orderData.total_line_items_price).then( (data) => {
-              // console.log(data);
-              order.line_items[0].price = orderData.total_line_items_price;
-              order.tags = "recurring-order";
-              service.post(undefined, undefined, url, { order: order }).then( (data) => {
-                resolve(data);
+
+            order.line_items[0].price = orderData.total_line_items_price;
+            order.tags = "recurring-order";
+            service.post(undefined, undefined, url, { order: order }).then( (newOrderData) => {
+              // console.log(newOrderData);
+              stripeController.stripeApp.applyCharges(stripeId, orderData.total_line_items_price).then( (data) => {
+                const jsonData = JSON.stringify(data);
+                const strInsertQuery = `INSERT INTO stripepaymentdetails (orderId, stripePaymentId, stripeReturnObject) 
+                                   values(${newOrderData.body.order.id}, '${data.id}', '${jsonData}' )`;
+                dbcon.update({ query: strInsertQuery }, (result) => {
+                  console.log(`insert payment details for order ${orderId}`);
+                });
+                resolve(newOrderData);
               } );
-              
             } );
+            
           });
           
         } else {
@@ -194,12 +201,41 @@ const productApp = {
     });
     return promise;
   },
+  getSubscription: () => {
+    const promise = new Promise((resolve, reject) => {
+      const strSelect = `SELECT * FROM subscription`;
+      dbcon.select({ query: strSelect }, function (result) {
+        resolve(result);
+      });
+    });
+    return promise;
+  },
   getUpcomingOrdersCount: ( ) => {
     const promise = new Promise((resolve, reject) => {
       const strSelect = `select count(t1.id) as totalRecords from orderstoplace as t1
                       left join subscription as t2 on t1.orderId = t2.orderId where
                       t1.orderPlaced = 0`;
       dbcon.select({ query: strSelect }, function (result) {
+        resolve(result);
+      });
+    });
+    return promise;
+  },
+
+  getPaymentDeatils: ( orderIds ) => {
+    const promise = new Promise((resolve, reject) => {
+      const strSelect = `select * from stripepaymentdetails where orderId in (${orderIds})`;
+      dbcon.select({ query: strSelect }, function (result) {
+        resolve(result);
+      });
+    });
+    return promise;
+  },
+  updateSubscriptionStatus:(subscriptionId, status) => {
+    const promise = new Promise((resolve, reject) => {
+      const strUpdate = `update subscription set subscriptionActive = ${status} where orderId = ${subscriptionId}`;
+      dbcon.update({ query: strUpdate }, (result) => {
+        // console.log(`Updated orders to place ${orderToPlaceId}`);
         resolve(result);
       });
     });

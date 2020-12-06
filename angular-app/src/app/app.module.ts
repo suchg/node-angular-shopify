@@ -22,6 +22,7 @@ import { CreateSubscriptionComponent } from './subscriptions/create-subscription
 import { ListSubscriptionsComponent } from './subscriptions/list-subscriptions/list-subscriptions.component';
 import { UpdateSubscriptionComponent } from './subscriptions/update-subscription/update-subscription.component';
 import { UpcomingOrdersComponent } from './orders-tab/upcoming-orders/upcoming-orders.component';
+import { SubscribedUsersComponent } from './orders-tab/subscribed-users/subscribed-users.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { UpcomingOrdersComponent } from './orders-tab/upcoming-orders/upcoming-o
     CreateSubscriptionComponent,
     ListSubscriptionsComponent,
     UpdateSubscriptionComponent,
-    UpcomingOrdersComponent
+    UpcomingOrdersComponent,
+    SubscribedUsersComponent
   ],
   imports: [
     BrowserModule,

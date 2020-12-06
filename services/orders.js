@@ -61,6 +61,42 @@ router.post('/shopifypost', (req, res) => {
     });
 });
 
+router.post('/updateSubscriptionStatus', (req, res) => {
+  const subscriptionId = req.body.subscriptionId;
+  const status = req.body.status;
+  productController.productApp.updateSubscriptionStatus(subscriptionId, status)
+    .then((shopResponse) => {
+      res.status(200).end(JSON.stringify(shopResponse));
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error.statusCode).send(error.error.error_description);
+    });
+});
+
+router.get('/paymentDeatils', (req, res) => {
+  const strIds = req.query.orderIds;
+  productController.productApp.getPaymentDeatils(strIds)
+    .then((shopResponse) => {
+      res.status(200).end(JSON.stringify(shopResponse));
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error.statusCode).send(error.error.error_description);
+    });
+});
+
+router.get('/subscription', (req, res) => {
+  productController.productApp.getSubscription()
+    .then((shopResponse) => {
+      res.status(200).end(JSON.stringify(shopResponse));
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(error.statusCode).send(error.error.error_description);
+    });
+});
+
 const manupulateOrders = {
   createNewOrder: () => {
     productController.productShopify.createNewOrder()

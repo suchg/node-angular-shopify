@@ -29,8 +29,20 @@
 
   <!-- Weight Column -->
   <ng-container matColumnDef="raised-by">
-    <th mat-header-cell *matHeaderCellDef> Raised By </th>
-    <td mat-cell *matCellDef="let element"> {{element.raisedBy}} </td>
+    <th mat-header-cell *matHeaderCellDef> 
+      <div class="filter-by-label">Raised By</div>
+      <div class="filter-by-user" >
+          <mat-form-field appearance="fill">
+            <mat-label>Filter by User</mat-label>
+            <mat-select (selectionChange)="onChangeUserFilter($event.value)">
+              <mat-option *ngFor="let subscribedUser of subscribedUsers" [value]="subscribedUser.value">
+                {{subscribedUser.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.raisedBy}}  </td>
   </ng-container>
 
   <!-- Name Column -->
