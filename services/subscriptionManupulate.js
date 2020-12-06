@@ -352,14 +352,14 @@ const operations = {
   },
   startCron: () => {
     // cron.schedule('0 */1 * * * *', () => {
-    cron.schedule('* */1 * * * *', () => {
+    cron.schedule('*/1 * * * *', () => {
       if( global.shop ) {
         operations.startSubscriptionPolling();
       }
     });
 
     // cron.schedule('0 */1 * * * *', () => {
-    cron.schedule('* */1 * * * *', () => {
+    cron.schedule('*/1 * * * *', () => {
       if( global.shop ) {
         operations.raiseOrdersPolling();
       }
