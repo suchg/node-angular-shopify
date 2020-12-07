@@ -60,7 +60,7 @@ export class ProcessedOrdersComponent {
       .subscribe((response: any) => {
         const link = response.headers.link;
         if( link ) {
-          this.nextUrl = link.replace('<https://unlikely-test-strore.myshopify.com', '').split('>;')[0].trim();
+          this.nextUrl = link.replace('<https://unlikelyflorist-com.myshopify.com', '').split('>;')[0].trim();
         }
         this.urlStack[this.currentPage + 1] = this.nextUrl;
         // this.manageUrlStack( this.nextUrl );
