@@ -260,10 +260,10 @@ const operations = {
     // const strSelect = `select * from orderstoplace where date(orderToPlaceDate) = CURDATE() and orderPlaced != 1`;
     // const strSelect = `select * from orderstoplace where orderPlaced != 1`;
 
-    // const strSelect = `select t1.* from orderstoplace as t1 join subscription as t2 WHERE t1.orderId = t2.orderId 
-    //                   and t1.orderPlaced != 1 and t2.subscriptionActive = 1 and date(t1.orderToPlaceDate) = CURDATE()`;
     const strSelect = `select t1.* from orderstoplace as t1 join subscription as t2 WHERE t1.orderId = t2.orderId 
-                      and t1.orderPlaced != 1 and t2.subscriptionActive = 1`;
+                      and t1.orderPlaced != 1 and t2.subscriptionActive = 1 and date(t1.orderToPlaceDate) = CURDATE()`;
+    // const strSelect = `select t1.* from orderstoplace as t1 join subscription as t2 WHERE t1.orderId = t2.orderId 
+    //                   and t1.orderPlaced != 1 and t2.subscriptionActive = 1`;
 
 
     async function executeOrders (productId, orderId, orderToPlaceId) {

@@ -43,7 +43,7 @@ const stripeApp = {
           ${currentDateTime},
           ${currentDateTime}
         )`;
-        console.log(strUpdate);
+        // console.log(strUpdate);
         dbcon.update({ query: strUpdate }, (result) => {
           resolve(result);
         });
