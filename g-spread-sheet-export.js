@@ -256,7 +256,7 @@ const initUpdateInactiveSubscription = () => {
         console.log(inactiveOrderIds);
         getUcomingOrders().then( (ordersArray) => {
             let ordersToInactive = ordersArray.filter( (order) => {
-                order['Order Status'] = objStatusMap[order['Order Id(order generated from)']] == 0 ?  "Canceled" : "Active";
+                order['Order Status'] = objStatusMap[order['Order Id(order generated from)']] == 0 ?  "cancelled" : "Active";
                 return inactiveOrderIds.includes(order['Order Id(order generated from)']) ;
             });
             updateInactiveUpcomingOrders(ordersToInactive);
