@@ -43,6 +43,44 @@ const appendData = async (data, options) => {
   // await purgeRows(sheets, sheetId, options)
 }
 
+/**
+ * @description
+ * Update data to the spreadsheet.
+ *
+ * @param {Object} data Object containing the values to be added
+ * @param {Object} options
+ * @param {String} options.email Email of the account with access to the spreadsheet
+ * @param {String} options.key Key to access the spreadsheet
+ * @param {String} options.spreadsheetId Id of the spreadsheet
+ * @param {String} [options.sheet] Name of the sheet. Defaults to the first sheet.
+ * @param {Number} [options.retention] Retention in days. Defaults to 14.
+ */
+const updateData = async (data, options, getRes) => {
+  validateOptions(options)
+
+  // set defaults
+  // data.date = data.date || dayjs().format('YYYY-MM-DD HH:mm')
+  options.sheet = options.sheet || ''
+  options.retention = options.retention || 14
+  options.keyName = options.keyName || 'Upcoming Order ID'
+
+  const auth = await spreadsheets.authorize(options)
+  const sheets = spreadsheets.client(auth, spreadsheetApiVersion)
+
+  const sheetId = await makeSureSheetExists(sheets, options)
+
+  const dataHeaders = Object.keys(data).filter((h) => h !== 'undefined' && h !== 'date')
+  // dataHeaders.unshift('date')
+  const sheetHeaders = await makeSureHeadersExist(sheets, dataHeaders, options)
+  if (!sheetHeaders.length ) {
+    throw new Error('The first column header must be \'date\'')
+  }
+
+  // await appendDataToSheet(sheets, data, sheetHeaders, options)
+  await updateRowIfExists(sheets, data, sheetHeaders, options, getRes)
+
+}
+
 const setKeyValues = async (data, options) => {
   validateOptions(options)
 
@@ -205,27 +243,23 @@ const purgeRows = async (sheets, sheetId, options) => {
   return spreadsheets.batchUpdate(sheets, updateRequest)
 }
 
-const updateRowIfExists = async (sheets, data, sheetHeaders, options) => {
+const updateRowIfExists = async (sheets, data, sheetHeaders, options, getRes) => {
   const { spreadsheetId, sheet } = options
-  const numberOfRowsToCheck = 1000
+  const numberOfRowsToCheck = 1000000
   const key = data[options.keyName]
 
   if (!key) {
     throw new Error(`Key is not specified. Set a value for "${options.keyName}" or specify "options.keyName" to use a different attribute as key.`)
   }
 
-  const request = {
-    spreadsheetId,
-    range: `${sheet}!A2:A${numberOfRowsToCheck + 1}`,
-  }
 
-  const getRes = await spreadsheets.valuesGet(sheets, request)
   if (!getRes.data.values) return
-
+  console.log("values get done");
   const index = getRes.data.values.findIndex((values) => {
     const [value] = values
-    return value === key
+    return values == key
   })
+  console.log("index"+index);
 
   if (index === -1) return
 
@@ -239,14 +273,33 @@ const updateRowIfExists = async (sheets, data, sheetHeaders, options) => {
       values: [values],
     },
   }
-
+  console.log("data updated >>>>>>>>>>>.");
   await spreadsheets.valuesUpdate(sheets, updateRequest)
-
   return true
+}
+
+const getSheetValues = async ( options, spreadsheetId, spreadSheetName ) => {
+  const numberOfRowsToCheck = 1000000;
+  validateOptions(options);
+  options.sheet = options.sheet || '';
+  options.retention = options.retention || 14;
+
+  const auth = await spreadsheets.authorize(options);
+  const sheets = spreadsheets.client(auth, spreadsheetApiVersion);
+
+  const request = {
+      spreadsheetId,
+      range: `${spreadSheetName}!A2:A${numberOfRowsToCheck + 1}`,
+  }
+
+  const getRes = await spreadsheets.valuesGet(sheets, request)
+  return getRes;
 }
 
 module.exports = {
   appendData,
   setKeyValues,
-  getRows
+  getRows,
+  updateData,
+  getSheetValues
 }

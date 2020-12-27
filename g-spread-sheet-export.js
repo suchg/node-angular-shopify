@@ -9,6 +9,7 @@ const spreadsheetId = '1v1RmfuFLxa6uKGRs55hJsymV_4kqK1QiP8oMmpfXY7s';
 var moment = require('moment');
 const request = require('request-promise');
 const { operations } = require('./services/subscriptionManupulate');
+const { json } = require('body-parser');
 global.applicationHost = 'https://unlikely-florist-subscription.herokuapp.com';
 // global.applicationHost = 'http://localhost:3000';
 
@@ -100,7 +101,8 @@ function getUcomingOrders() {
                             'Shiping Address': shipping_address.address1 || shipping_address.address2,
                             'Financial Status': order.financial_status,
                             'Order Date': order.created_at,
-                            'Fulfillment Status': upcomingOrder.fulfillment_status
+                            'Fulfillment Status': upcomingOrder.fulfillment_status,
+                            'Order Status': "Active"
                         }
                     } );
                     // console.log(processedOrders);
@@ -117,6 +119,28 @@ function getUcomingOrders() {
         } );
         return promise;
     }
+
+function getInActiveSubscription(){
+    const promise = new Promise( ( resolve, reject ) => {
+        let finalUrl = `${global.applicationHost}/api/subscription`;
+        request.get( finalUrl )
+        .then((data) => {
+            try {
+                let dataObj = JSON.parse(data);
+                let subscription = dataObj.result;
+                resolve(subscription);
+            } catch (error) {
+                console.error('export order >> error while fetching subscriptions');
+                reject(error);
+            }
+        })
+        .catch((error) => {
+            console.error('export order >> error while fetching subscriptions');
+            reject(error);
+        });
+    } );
+    return promise;
+}
 
 function addDataToSpreadSheet(ordersArray, spreadSheetName) {
     console.log('export started for ' + spreadSheetName);
@@ -166,6 +190,43 @@ function addDataToSpreadSheet(ordersArray, spreadSheetName) {
     run()
 }
 
+function updateInactiveUpcomingOrders(ordersArray) {
+    let spreadSheetName = "upcomingorders";
+    const options = {
+        email: email,
+        key: key,
+        spreadsheetId: spreadsheetId,
+        sheet: spreadSheetName, // Optional. Defaults to the first sheet.
+        retention: 1000000, // Retention in days. Defaults to 14.
+    }
+    
+    const data = {
+        val: '1test',
+        val1: Math.floor(Math.random() * 50),
+        val2: Math.floor(Math.random() * 1000),
+    }
+    
+    const run = async () => {
+        try {
+              const getRes = await gsr.getSheetValues(options, spreadsheetId, spreadSheetName);
+            for( var i = 0; i < ordersArray.length; i++ ) {
+                var order = ordersArray[i];
+                let orderId = '';
+                if( order['Upcoming Order ID'] ) {
+                    orderId = order['Upcoming Order ID'];
+                } else {
+                    orderId = order['Order Id'];
+                }
+                await gsr.updateData(order, options, getRes);
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+    
+    run()
+}
+
 const initOrdersExport = () => {
     getOrders().then( (ordersArray) => {
         addDataToSpreadSheet(ordersArray, 'orders');
@@ -184,11 +245,36 @@ const initSubscriptionOrdersExport = () => {
     } );
 };
 
+const initUpdateInactiveSubscription = () => {
+    getInActiveSubscription().then( (subscriptionArray) => {
+        let objStatusMap = {};
+        let inactiveOrderIds = subscriptionArray.map((element) => {
+            let jsonData = JSON.parse(element.orderData);
+            objStatusMap[jsonData.order_number] = element.subscriptionActive;
+            return jsonData.order_number;
+        } );
+        console.log(inactiveOrderIds);
+        getUcomingOrders().then( (ordersArray) => {
+            let ordersToInactive = ordersArray.filter( (order) => {
+                order['Order Status'] = objStatusMap[order['Order Id(order generated from)']] == 0 ?  "Canceled" : "Active";
+                return inactiveOrderIds.includes(order['Order Id(order generated from)']) ;
+            });
+            updateInactiveUpcomingOrders(ordersToInactive);
+        } );
+    } );
+};
+
 const startExportCron = () => {
-    cron.schedule('0 */6 * * * *', () => {
+    cron.schedule('*/12 * * * *', () => {
+        console.log("Cron started data export");
         initOrdersExport();
         initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
+    });
+
+    cron.schedule('*/18 * * * *', () => {
+        console.log("Cron started active inactive subscription");
+        initUpdateInactiveSubscription();
     });
 }
 
