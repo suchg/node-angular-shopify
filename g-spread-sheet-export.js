@@ -265,14 +265,14 @@ const initUpdateInactiveSubscription = () => {
 };
 
 const startExportCron = () => {
-    cron.schedule('*/12 * * * *', () => {
+    cron.schedule('* */2 * * *', () => {
         console.log("Cron started data export");
         initOrdersExport();
         initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
     });
 
-    cron.schedule('*/18 * * * *', () => {
+    cron.schedule('* */3 * * *', () => {
         console.log("Cron started active inactive subscription");
         initUpdateInactiveSubscription();
     });
