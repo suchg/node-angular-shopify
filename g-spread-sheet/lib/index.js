@@ -254,12 +254,12 @@ const updateRowIfExists = async (sheets, data, sheetHeaders, options, getRes) =>
 
 
   if (!getRes.data.values) return
-  console.log("values get done");
+  // console.log("values get done");
   const index = getRes.data.values.findIndex((values) => {
     const [value] = values
     return values == key
   })
-  console.log("index"+index);
+  // console.log("index"+index);
 
   if (index === -1) return
 
@@ -273,7 +273,7 @@ const updateRowIfExists = async (sheets, data, sheetHeaders, options, getRes) =>
       values: [values],
     },
   }
-  console.log("data updated >>>>>>>>>>>.");
+  // console.log("data updated >>>>>>>>>>>.");
   await spreadsheets.valuesUpdate(sheets, updateRequest)
   return true
 }
