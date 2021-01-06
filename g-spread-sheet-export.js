@@ -84,6 +84,9 @@ function getUcomingOrders() {
                         const order = JSON.parse(upcomingOrder.orderData);
                         const customer = order.customer || {};
                         const shipping_address = order.shipping_address || {};
+                        const giftMessage = order.line_items.map( (item) => { 
+                            return item['properties']['Note']; 
+                        } ).join(', ');
                         return {
                             'Upcoming Order ID': upcomingOrder.id,
                             'Order Id(order generated from)': order.order_number,
@@ -102,7 +105,8 @@ function getUcomingOrders() {
                             'Financial Status': order.financial_status,
                             'Order Date': order.created_at,
                             'Fulfillment Status': upcomingOrder.fulfillment_status,
-                            'Order Status': "Active"
+                            'Order Status': "Active",
+                            'Gift Message': giftMessage
                         }
                     } );
                     // console.log(processedOrders);
