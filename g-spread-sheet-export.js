@@ -84,9 +84,14 @@ function getUcomingOrders() {
                         const order = JSON.parse(upcomingOrder.orderData);
                         const customer = order.customer || {};
                         const shipping_address = order.shipping_address || {};
-                        const giftMessage = order.line_items.map( (item) => { 
-                            console.log(item['properties']);
-                            return item['properties']['Note']; 
+                        const giftMessage = order.line_items.map( (item) => {
+                            const strNoteValue = item['properties'].map( (item2) => {
+                                if( item2.name == "Note" ) {
+                                    return item2.value;
+                                }
+                            } )
+                            console.log(strNoteValue);
+                            return strNoteValue; 
                         } ).join(', ');
                         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                         console.log(giftMessage);
