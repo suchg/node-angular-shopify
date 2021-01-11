@@ -269,17 +269,17 @@ const initUpdateInactiveSubscription = () => {
 };
 
 const startExportCron = () => {
-    cron.schedule('* */2 * * *', () => {
+    cron.schedule('*/1 * * * *', () => {
         console.log("Cron started data export");
         initOrdersExport();
         initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
     });
 
-    cron.schedule('* */3 * * *', () => {
-        console.log("Cron started active inactive subscription");
-        initUpdateInactiveSubscription();
-    });
+    // cron.schedule('* */3 * * *', () => {
+    //     console.log("Cron started active inactive subscription");
+    //     initUpdateInactiveSubscription();
+    // });
 }
 
 module.exports = {
