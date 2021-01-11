@@ -271,7 +271,7 @@ const initUpdateInactiveSubscription = () => {
 };
 
 const startExportCron = () => {
-    cron.schedule('*/1 * * * *', () => {
+    cron.schedule('*/5 * * * *', () => {
         console.log("Cron started data export");
         // initOrdersExport();
         initUpcomingOrdersExport();
