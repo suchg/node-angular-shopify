@@ -84,18 +84,16 @@ function getUcomingOrders() {
                         const order = JSON.parse(upcomingOrder.orderData);
                         const customer = order.customer || {};
                         const shipping_address = order.shipping_address || {};
-                        const giftMessage = order.line_items.map( (item) => {
+                        let giftMessage = order.line_items.map( (item) => {
                             const strNoteValue = item['properties'].map( (item2) => {
                                 if( item2.name == "Note" ) {
                                     return item2.value;
+                                } else {
+                                    return "";
                                 }
-                            } )
-                            console.log(strNoteValue);
-                            return strNoteValue; 
-                        } ).join("-");
-                        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
-                        console.log(giftMessage);
-                        console.log('*************************');
+                            } ).join("");
+                            return strNoteValue || ""; 
+                        } ).join("");
                         return {
                             'Upcoming Order ID': upcomingOrder.id,
                             'Order Id(order generated from)': order.order_number,
@@ -250,7 +248,7 @@ const initUpcomingOrdersExport = () => {
     console.log('upcoming order export start');
     getUcomingOrders().then( (ordersArray) => {
         console.log('upcoming order export start 2 : ' + ordersArray.length);
-        addDataToSpreadSheet(ordersArray, 'upcomingorders');
+        // addDataToSpreadSheet(ordersArray, 'upcomingorders');
     } );
 };
 
