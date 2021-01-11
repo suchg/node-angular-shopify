@@ -93,7 +93,9 @@ function getUcomingOrders() {
                             console.log(strNoteValue);
                             return strNoteValue; 
                         } ).join('');
-                        
+                        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
+                        console.log(giftMessage);
+                        console.log('*************************');
                         return {
                             'Upcoming Order ID': upcomingOrder.id,
                             'Order Id(order generated from)': order.order_number,
