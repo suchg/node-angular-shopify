@@ -248,7 +248,7 @@ const initUpcomingOrdersExport = () => {
     console.log('upcoming order export start');
     getUcomingOrders().then( (ordersArray) => {
         console.log('upcoming order export start 2 : ' + ordersArray.length);
-        // addDataToSpreadSheet(ordersArray, 'upcomingorders');
+        addDataToSpreadSheet(ordersArray, 'upcomingorders');
     } );
 };
 
