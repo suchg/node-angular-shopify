@@ -92,7 +92,7 @@ function getUcomingOrders() {
                             } )
                             console.log(strNoteValue);
                             return strNoteValue; 
-                        } ).join('');
+                        } ).join("");
                         console.log('>>>>>>>>>>>>>>>>>>>>>>>>>');
                         console.log(giftMessage);
                         console.log('*************************');
