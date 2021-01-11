@@ -238,7 +238,9 @@ const initOrdersExport = () => {
 };
 
 const initUpcomingOrdersExport = () => {
+    console.log('upcoming order export start');
     getUcomingOrders().then( (ordersArray) => {
+        console.log('upcoming order export start 2 : ' + ordersArray.length);
         addDataToSpreadSheet(ordersArray, 'upcomingorders');
     } );
 };
@@ -271,9 +273,9 @@ const initUpdateInactiveSubscription = () => {
 const startExportCron = () => {
     cron.schedule('*/1 * * * *', () => {
         console.log("Cron started data export");
-        initOrdersExport();
+        // initOrdersExport();
         initUpcomingOrdersExport();
-        initSubscriptionOrdersExport();
+        // initSubscriptionOrdersExport();
     });
 
     // cron.schedule('* */3 * * *', () => {
