@@ -85,8 +85,12 @@ function getUcomingOrders() {
                         const customer = order.customer || {};
                         const shipping_address = order.shipping_address || {};
                         const giftMessage = order.line_items.map( (item) => { 
+                            console.log(item['properties']);
                             return item['properties']['Note']; 
                         } ).join(', ');
+                        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                        console.log(giftMessage);
+                        console.log("*****************************");
                         return {
                             'Upcoming Order ID': upcomingOrder.id,
                             'Order Id(order generated from)': order.order_number,
