@@ -18,10 +18,11 @@ function getOrders(orderType) {
         let url = `/admin/api/2020-07/orders.json?status=any`;
         url = encodeURIComponent(url);
         let finalUrl = `${global.applicationHost}/api/shopifyget?url=${url}`;
-        // console.log(finalUrl);
+        console.log(finalUrl);
         // return;
         request.get( finalUrl )
         .then((data) => {
+            console.log('step 1');
             try {
                 let orders = JSON.parse(JSON.parse(data).body).orders;
                 if( orderType == 'subscription' ) {
