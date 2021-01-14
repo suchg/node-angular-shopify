@@ -32,6 +32,12 @@ function getOrders(orderType) {
                 let processedOrders = orders.map( (order) => {
                     const customer = order.customer || {};
                     const shipping_address = order.shipping_address || {};
+                    const senderFirstName = customer.first_name;
+                    const senderLastName = customer.laster_name;
+                    const senderPhone = customer.phone;
+                    const senderEmail = customer.email;
+                    console.log( customer );
+                    console.log( order );
                     return {
                         // id: order.id,
                         // email: order.email,
@@ -39,10 +45,10 @@ function getOrders(orderType) {
                         'Delivery Date': order.delivery_date,
                         'Item': order.line_items.map( (item) => { return item.title } ).join(', '),
                         'Qty': customer.orders_count,
-                        'Sender First Name': customer.first_name,
-                        'Sender Last Name': customer.laster_name,
-                        'Sender Phone': customer.phone,
-                        'Sender Email': customer.email,
+                        'Sender First Name': senderFirstName, // customer.first_name,
+                        'Sender Last Name': senderLastName, // customer.laster_name,
+                        'Sender Phone': senderPhone, // customer.phone,
+                        'Sender Email': senderEmail, // customer.email,
                         'Shipping ZIP': shipping_address.zip,
                         'Delivery ZIP': customer.note,
                         'Recipient Name': shipping_address.first_name + ' ' + shipping_address.last_name,
@@ -254,7 +260,7 @@ const initUpcomingOrdersExport = () => {
 
 const initSubscriptionOrdersExport = () => {
     getOrders('subscription').then( (ordersArray) => {
-        addDataToSpreadSheet(ordersArray, 'subscriptions');
+        // addDataToSpreadSheet(ordersArray, 'subscriptions');
     } );
 };
 
@@ -278,17 +284,17 @@ const initUpdateInactiveSubscription = () => {
 };
 
 const startExportCron = () => {
-    cron.schedule('* */2 * * *', () => {
+    cron.schedule('*/1 * * * *', () => {
         console.log("Cron started data export");
-        initOrdersExport();
-        initUpcomingOrdersExport();
+        // initOrdersExport();
+        // initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
     });
 
-    cron.schedule('* */3 * * *', () => {
-        console.log("Cron started active inactive subscription");
-        initUpdateInactiveSubscription();
-    });
+    // cron.schedule('* */3 * * *', () => {
+    //     console.log("Cron started active inactive subscription");
+    //     initUpdateInactiveSubscription();
+    // });
 }
 
 module.exports = {
