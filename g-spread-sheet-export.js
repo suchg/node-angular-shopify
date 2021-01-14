@@ -30,6 +30,7 @@ function getOrders(orderType) {
                 } else {
                     orders = orders.filter( (order) => order.source_name !== 'subscription-app' );
                 }
+                console.log(">>>>>>" + orders.length);
                 let processedOrders = orders.map( (order) => {
                     const customer = order.customer || {};
                     const shipping_address = order.shipping_address || {};
