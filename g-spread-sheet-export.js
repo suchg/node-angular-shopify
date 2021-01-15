@@ -18,7 +18,7 @@ function getOrders(orderType) {
         let url = `/admin/api/2020-07/orders.json?status=any`;
         url = encodeURIComponent(url);
         let finalUrl = `${global.applicationHost}/api/shopifyget?url=${url}`;
-        console.log(finalUrl);
+        // console.log(finalUrl);
         // return;
         request.get( finalUrl )
         .then((data) => {
@@ -30,16 +30,41 @@ function getOrders(orderType) {
                 } else {
                     orders = orders.filter( (order) => order.source_name !== 'subscription-app' );
                 }
-                console.log(">>>>>>" + orders.length);
+                console.log( ">>>" + orders.length );
                 let processedOrders = orders.map( (order) => {
-                    const customer = order.customer || {};
-                    const shipping_address = order.shipping_address || {};
-                    const senderFirstName = customer.first_name;
-                    const senderLastName = customer.laster_name;
-                    const senderPhone = customer.phone;
-                    const senderEmail = customer.email;
-                    console.log( customer );
-                    console.log( order );
+                    let customer = order.customer || {};
+                    let shipping_address = order.shipping_address || {};
+                    let senderFirstName = customer.first_name;
+                    let senderLastName = customer.last_name;
+                    let senderPhone = customer.phone;
+                    let senderEmail = customer.email;
+
+                    let OrderPlacedByName = "";
+                    let OrderPlacedByPhone = "";
+                    let RecipientName = "";
+                    let RecipentPhone = "";
+                    order.line_items.map( (item) => {
+                        const strNoteValue = item['properties'].map( (item2) => {
+                            if( item2.name == "Order Placed By Name" ) {
+                                OrderPlacedByName = item2.value;
+                            } else if ( item2.name == "Order Placed By Phone" ) {
+                                OrderPlacedByPhone = item2.value;
+                            } else if ( item2.name == "Recipient Name" ) {
+                                RecipientName = item2.value;
+                            } else if ( item2.name == "Recipient Phone" ) {
+                                RecipentPhone = item2.value;
+                            } else {
+                                return "";
+                            }
+                        } ).join("");
+                        return strNoteValue || ""; 
+                    } );
+
+                    if( OrderPlacedByName && OrderPlacedByName !== "" ) {
+                        senderFirstName = "";
+                        senderLastName = "";
+                    }
+
                     return {
                         // id: order.id,
                         // email: order.email,
@@ -47,14 +72,14 @@ function getOrders(orderType) {
                         'Delivery Date': order.delivery_date,
                         'Item': order.line_items.map( (item) => { return item.title } ).join(', '),
                         'Qty': customer.orders_count,
-                        'Sender First Name': senderFirstName, // customer.first_name,
+                        'Sender First Name': senderFirstName || OrderPlacedByName, // customer.first_name,
                         'Sender Last Name': senderLastName, // customer.laster_name,
-                        'Sender Phone': senderPhone, // customer.phone,
+                        'Sender Phone': OrderPlacedByPhone || senderPhone, // customer.phone,
                         'Sender Email': senderEmail, // customer.email,
                         'Shipping ZIP': shipping_address.zip,
                         'Delivery ZIP': customer.note,
-                        'Recipient Name': shipping_address.first_name + ' ' + shipping_address.last_name,
-                        'Recipient Phone': shipping_address.phone,
+                        'Recipient Name': RecipientName || OrderPlacedByName || (shipping_address.first_name + ' ' + shipping_address.last_name),
+                        'Recipient Phone': RecipentPhone || OrderPlacedByPhone || shipping_address.phone,
                         'Shiping Address': shipping_address.address1 || shipping_address.address2,
                         'Financial Status': order.financial_status,
                         'Order Date': order.created_at,
@@ -80,8 +105,7 @@ function getUcomingOrders() {
             // let url = `/admin/api/upcomingOrders?from=0&limit=10000`;
             // url = encodeURIComponent(url);
             let finalUrl = `${global.applicationHost}/api/upcomingOrders?from=0&limit=10000`;
-            // console.log(finalUrl);
-            // return;
+
             request.get( finalUrl )
             .then((data) => {
                 try {
@@ -92,30 +116,54 @@ function getUcomingOrders() {
                         const order = JSON.parse(upcomingOrder.orderData);
                         const customer = order.customer || {};
                         const shipping_address = order.shipping_address || {};
+
+                        let senderFirstName = customer.first_name;
+                        let senderLastName = customer.last_name;
+                        let senderPhone = customer.phone;
+                        let senderEmail = customer.email;
+
+                        let OrderPlacedByName = "";
+                        let OrderPlacedByPhone = "";
+                        let RecipientName = "";
+                        let RecipentPhone = "";
                         let giftMessage = order.line_items.map( (item) => {
                             const strNoteValue = item['properties'].map( (item2) => {
                                 if( item2.name == "Note" ) {
                                     return item2.value;
+                                } else if( item2.name == "Order Placed By Name" ) {
+                                    OrderPlacedByName = item2.value;
+                                } else if ( item2.name == "Order Placed By Phone" ) {
+                                    OrderPlacedByPhone = item2.value;
+                                } else if ( item2.name == "Recipient Name" ) {
+                                    RecipientName = item2.value;
+                                } else if ( item2.name == "Recipient Phone" ) {
+                                    RecipentPhone = item2.value;
                                 } else {
                                     return "";
                                 }
                             } ).join("");
                             return strNoteValue || ""; 
                         } ).join("");
+
+                        if( OrderPlacedByName && OrderPlacedByName !== "" ) {
+                            senderFirstName = "";
+                            senderLastName = "";
+                        }
+
                         return {
                             'Upcoming Order ID': upcomingOrder.id,
                             'Order Id(order generated from)': order.order_number,
                             'Delivery Date': upcomingOrder.orderToPlaceDate,
                             'Item': order.line_items.map( (item) => { return item.title } ).join(', '),
                             'Qty': customer.orders_count,
-                            'Sender First Name': customer.first_name,
-                            'Sender Last Name': customer.laster_name,
-                            'Sender Phone': customer.phone,
-                            'Sender Email': customer.email,
+                            'Sender First Name': senderFirstName || OrderPlacedByName,
+                            'Sender Last Name': senderLastName,
+                            'Sender Phone': OrderPlacedByPhone || senderPhone,
+                            'Sender Email': senderEmail,
                             'Shipping ZIP': shipping_address.zip,
                             'Delivery ZIP': customer.note,
-                            'Recipient Name': (shipping_address.first_name || '') + ' ' + (shipping_address.last_name || ''),
-                            'Recipient Phone': shipping_address.phone,
+                            'Recipient Name': RecipientName || ((shipping_address.first_name || '') + ' ' + (shipping_address.last_name || '')),
+                            'Recipient Phone': RecipentPhone || shipping_address.phone,
                             'Shiping Address': shipping_address.address1 || shipping_address.address2,
                             'Financial Status': order.financial_status,
                             'Order Date': order.created_at,
@@ -262,7 +310,7 @@ const initUpcomingOrdersExport = () => {
 
 const initSubscriptionOrdersExport = () => {
     getOrders('subscription').then( (ordersArray) => {
-        // addDataToSpreadSheet(ordersArray, 'subscriptions');
+        addDataToSpreadSheet(ordersArray, 'subscriptions');
     } );
 };
 
@@ -289,7 +337,7 @@ const startExportCron = () => {
     cron.schedule('*/1 * * * *', () => {
         console.log("Cron started data export");
         // initOrdersExport();
-        // initUpcomingOrdersExport();
+        initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
     });
 
