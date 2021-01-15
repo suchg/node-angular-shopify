@@ -334,9 +334,9 @@ const initUpdateInactiveSubscription = () => {
 };
 
 const startExportCron = () => {
-    cron.schedule('*/10 * * * *', () => {
+    cron.schedule('* */1 * * *', () => {
         console.log("Cron started data export");
-        // initOrdersExport();
+        initOrdersExport();
         initUpcomingOrdersExport();
         initSubscriptionOrdersExport();
     });
