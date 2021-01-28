@@ -51,6 +51,7 @@ var objFUnction = {
         try {
           const intent =  await objStripe.setupIntents.create({
             customer: customer.id,
+            payment_method_types: ['card']
           });
           if( intent.client_secret ) {
             resolve(intent);
